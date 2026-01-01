@@ -1,1 +1,3 @@
-tsconfig.json
+**/*.test.js
+tsconfig*.json
+vitest.config.js
