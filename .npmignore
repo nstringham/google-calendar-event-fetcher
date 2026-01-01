@@ -1,5 +1,4 @@
-**/*.test.js
+**/*.test*.js
 .editorconfig
 eslint.config.js
-tsconfig*.json
-vitest.config.js
+tsconfig.json

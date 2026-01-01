@@ -9,6 +9,5 @@
     "declarationMap": true,
     "outDir": "types"
   },
-  "include": ["src/**/*.js"],
-  "exclude": ["src/**/*.test.js"]
+  "include": ["src/**/*.js"]
 }
