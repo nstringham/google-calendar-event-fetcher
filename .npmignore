@@ -1,3 +1,4 @@
 **/*.test.js
+.editorconfig
 tsconfig*.json
 vitest.config.js

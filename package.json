@@ -26,9 +26,12 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest",
+    "format": "prettier --write .",
+    "prettier": "prettier --check .",
     "prepack": "npm run build"
   },
   "devDependencies": {
+    "prettier": "^3.7.4",
     "typescript": "^5.9.3",
     "vitest": "^4.0.16"
   }
