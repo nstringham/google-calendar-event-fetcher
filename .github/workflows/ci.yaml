@@ -1,0 +1,31 @@
+name: CI
+
+on:
+    - push
+    - workflow_dispatch
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+                  cache: npm
+            - run: npm ci
+            - run: npm pack
+
+    test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [22, 24, 25]
+        steps:
+            - uses: actions/checkout@v6
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: npm
+            - run: npm ci
+            - run: npm test
