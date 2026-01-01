@@ -1,0 +1,33 @@
+{
+  "name": "google-calendar-event-fetcher",
+  "version": "0.0.1",
+  "description": "Fetch and transform events from the Google Calendar API",
+  "keywords": [
+    "google",
+    "calendar",
+    "google-calendar"
+  ],
+  "homepage": "https://github.com/nstringham/google-calendar-event-fetcher#readme",
+  "bugs": {
+    "url": "https://github.com/nstringham/google-calendar-event-fetcher/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nstringham/google-calendar-event-fetcher.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Nate Stringham",
+    "url": "https://github.com/nstringham"
+  },
+  "type": "module",
+  "main": "src/index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepack": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
