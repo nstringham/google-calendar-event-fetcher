@@ -1,4 +1,4 @@
-**/*.test*.js
+**/*.test.*
 .editorconfig
 eslint.config.js
 tsconfig.json
