@@ -6,8 +6,6 @@ export default defineConfig([
     files: ["**/*.js"],
     plugins: { js },
     extends: ["js/recommended"],
-  },
-  {
     rules: {
       "no-undef": "off",
     },
