@@ -1,11 +1,11 @@
-import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
+import js from "@eslint/js";
+import eslintConfigPrettier from "eslint-config-prettier/flat";
 
 export default defineConfig([
+  js.configs.recommended,
+  eslintConfigPrettier,
   {
-    files: ["**/*.js"],
-    plugins: { js },
-    extends: ["js/recommended"],
     rules: {
       "no-undef": "off",
     },
