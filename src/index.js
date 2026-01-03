@@ -63,6 +63,7 @@ export default GoogleCalendarEventFetcher;
  */
 
 /**
+ * https://developers.google.com/workspace/calendar/api/v3/reference/events#resource-representations
  * @typedef {Object} GoogleCalendarEvent
  * @property {"calendar#event"} kind Type of the resource
  * @property {string} id Opaque identifier of the event.
@@ -74,6 +75,7 @@ export default GoogleCalendarEventFetcher;
  */
 
 /**
+ * https://developers.google.com/workspace/calendar/api/v3/reference/events/list#response
  * @typedef {Object} GoogleCalendarEvents
  * @property {"calendar#events"} kind Type of the collection
  * @property {GoogleCalendarEvent[]} items List of events on the calendar.
