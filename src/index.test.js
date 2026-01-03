@@ -1,16 +1,28 @@
 import { describe, it, expect, vi } from "vitest";
 import defaultExport, { GoogleCalendarEventFetcher } from "./index.js";
 
+/** @import { Mock } from "vitest" */
+/** @import { Options, GoogleCalendarEvent, GoogleCalendarEvents } from "./index.js"; */
+
 const API_KEY = "example_api_key";
 const CALENDAR_ID = "example_calendar@group.calendar.google.com";
 
 /**
  * Creates a mock for the fetch function.
  * @param {Response} response
- * @returns {import("vitest").Mock<Required<import("./index.js").Options>["fetch"]>}
+ * @returns {Mock<Required<Options>["fetch"]>}
  */
 function mockFetch(response) {
   return vi.fn(() => Promise.resolve(response));
+}
+
+/**
+ * Transforms an event into a simple string.
+ * @param {GoogleCalendarEvent} event
+ * @returns {string}
+ */
+function transformToString(event) {
+  return `${event.summary} (${event.id})`;
 }
 
 describe("GoogleCalendarEventFetcher", () => {
@@ -54,16 +66,52 @@ describe("GoogleCalendarEventFetcher", () => {
     ).toThrow();
   });
 
-  it("should fetch events within a given range", async () => {
+  it("should accept a transform function", () => {
+    new GoogleCalendarEventFetcher({
+      apiKey: API_KEY,
+      calendarId: CALENDAR_ID,
+      transform: transformToString,
+    });
+  });
+
+  it("should require transform to be a function if provided", () => {
+    expect(
+      () =>
+        new GoogleCalendarEventFetcher({
+          apiKey: API_KEY,
+          calendarId: CALENDAR_ID,
+          // @ts-expect-error
+          transform: "not a function",
+        }),
+    ).toThrow();
+  });
+
+  it("should fetch and transformevents within a given range", async () => {
+    /** @satisfies {GoogleCalendarEvents} */
     const mockEvents = {
       kind: "calendar#events",
       items: [
-        { kind: "calendar#event", id: "1", summary: "Event 1" },
-        { kind: "calendar#event", id: "2", summary: "Event 2" },
+        {
+          kind: "calendar#event",
+          id: "1",
+          summary: "Event 1",
+          start: { date: "2026-01-10" },
+          end: { date: "2026-01-10" },
+        },
+        {
+          kind: "calendar#event",
+          id: "2",
+          summary: "Event 2",
+          start: { dateTime: "2026-01-12T12:00:00Z", timeZone: "America/New_York" },
+          end: { dateTime: "2026-01-12T13:00:00Z", timeZone: "America/New_York" },
+        },
       ],
     };
     const fetch = mockFetch(Response.json(mockEvents));
-    const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
+    const transform = vi.fn(transformToString);
+
+    const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch, transform });
+
     const from = new Date("2026-01-01T00:00:00Z");
     const to = new Date("2026-01-31T23:59:59Z");
 
@@ -77,6 +125,10 @@ describe("GoogleCalendarEventFetcher", () => {
     expect(calledUrl.searchParams.get("timeMin")).toBe(from.toISOString());
     expect(calledUrl.searchParams.get("timeMax")).toBe(to.toISOString());
 
-    expect(events).toEqual(mockEvents);
+    expect(transform).toHaveBeenCalledTimes(2);
+    expect(transform).toHaveBeenNthCalledWith(1, mockEvents.items[0]);
+    expect(transform).toHaveBeenNthCalledWith(2, mockEvents.items[1]);
+
+    expect(events).toEqual(["Event 1 (1)", "Event 2 (2)"]);
   });
 });
