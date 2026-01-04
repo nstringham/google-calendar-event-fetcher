@@ -13,9 +13,9 @@ const CALENDAR_ID = "example_calendar@group.calendar.google.com";
  */
 function mockFetch(...responses) {
   /** @type {Mock<(url: URL) => Promise<Response>>} */
-  const mock = vi.fn(() => Promise.resolve(Response.json({ kind: "calendar#events", items: [] })));
+  const mock = vi.fn(async () => Response.json({ kind: "calendar#events", items: [] }));
   for (const response of responses) {
-    mock.mockReturnValueOnce(Promise.resolve(Response.json(response)));
+    mock.mockResolvedValueOnce(Response.json(response));
   }
   return mock;
 }
