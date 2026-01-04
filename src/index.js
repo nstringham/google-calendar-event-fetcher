@@ -47,7 +47,7 @@ export class GoogleCalendarEventFetcher {
    * Fetches all the events within a given range.
    * @param {Date} from The start of the time range to fetch events for.
    * @param {Date} to The end of the time range to fetch events for.
-   * @returns {Promise<T[]>} A promise that resolves to {@link allEvents}
+   * @returns {Promise<T[]>} A promise that resolves to {@link allEvents}.
    */
   async fetchEvents(from, to) {
     const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${this.#calendarId}/events`);
@@ -101,14 +101,14 @@ export default GoogleCalendarEventFetcher;
 /**
  * https://developers.google.com/workspace/calendar/api/v3/reference/events/list#response
  * @typedef {Object} GoogleCalendarEvents |
- * @property {"calendar#events"} kind Type of the collection
+ * @property {"calendar#events"} kind Type of the collection.
  * @property {GoogleCalendarEvent[]} items List of events on the calendar.
  */
 
 /**
  * https://developers.google.com/workspace/calendar/api/v3/reference/events#resource-representations
  * @typedef {Object} GoogleCalendarEvent
- * @property {"calendar#event"} kind Type of the resource
+ * @property {"calendar#event"} kind Type of the resource.
  * @property {string} id Opaque identifier of the event.
  * @property {string} summary Title of the event.
  * @property {string=} description Description of the event. Can contain HTML.
@@ -127,7 +127,7 @@ export default GoogleCalendarEventFetcher;
 /**
  * The start or end time of a non-all day event
  * @typedef {Object} GoogleCalendarDateTime
- * @property {string} dateTime The time, as a combined date-time value (formatted according to RFC3339)
+ * @property {string} dateTime The time, as a combined date-time value (formatted according to RFC3339).
  * @property {string} timeZone The time zone in which the time is specified. (Formatted as an IANA Time Zone Database name, e.g. "Europe/Zurich".)
  */
 
