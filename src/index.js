@@ -48,6 +48,7 @@ export class GoogleCalendarEventFetcher {
    * @param {Date} from The start of the time range to fetch events for.
    * @param {Date} to The end of the time range to fetch events for.
    * @returns {Promise<T[]>} A promise that resolves to {@link allEvents}.
+   * @see https://developers.google.com/workspace/calendar/api/v3/reference/events/list
    */
   async fetchEvents(from, to) {
     const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${this.#calendarId}/events`);
