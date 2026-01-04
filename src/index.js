@@ -8,6 +8,19 @@ export class GoogleCalendarEventFetcher {
   #transform;
   #fetch;
 
+  /** @type {Map<string, T>} */
+  #allEvents = new Map();
+
+  /**
+   * All events that have been fetched so far.
+   */
+  get allEvents() {
+    return Array.from(this.#allEvents.values());
+  }
+
+  /** @type {Set<(events: T[]) => void>} */
+  #subscribers = new Set();
+
   /**
    * @param {GoogleCalendarEvent extends T ? MakeOptional<Options<T>, "transform"> : Options<T>} options
    */
@@ -34,7 +47,7 @@ export class GoogleCalendarEventFetcher {
    * Fetches all the events within a given range.
    * @param {Date} from The start of the time range to fetch events for.
    * @param {Date} to The end of the time range to fetch events for.
-   * @returns {Promise<T[]>} A promise that resolves to an array of events.
+   * @returns {Promise<T[]>} A promise that resolves to {@link allEvents}
    */
   async fetchEvents(from, to) {
     const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${this.#calendarId}/events`);
@@ -47,7 +60,29 @@ export class GoogleCalendarEventFetcher {
     }
     /** @type {GoogleCalendarEvents} */
     const events = await response.json();
-    return events.items.map((event) => this.#transform(event));
+    for (const event of events.items) {
+      this.#allEvents.set(event.id, this.#transform(event));
+    }
+    this.#notifySubscribers();
+    return this.allEvents;
+  }
+
+  /**
+   * Subscribes to events.
+   * @param {(events: T[]) => void} callback The callback to be called when events new are fetched.
+   * @returns {() => void} A function to unsubscribe the callback.
+   */
+  subscribe(callback) {
+    this.#subscribers.add(callback);
+    return () => {
+      this.#subscribers.delete(callback);
+    };
+  }
+
+  #notifySubscribers() {
+    for (const subscriber of this.#subscribers) {
+      subscriber(this.allEvents);
+    }
   }
 }
 
