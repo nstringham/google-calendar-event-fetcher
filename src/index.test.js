@@ -69,13 +69,13 @@ const EVENTS = {
 };
 
 describe("GoogleCalendarEventFetcher", () => {
-  it("should be exported as default and with a name", () => {
+  it("is exported as default and with a name", () => {
     expect(GoogleCalendarEventFetcher).toBeDefined();
     expect(GoogleCalendarEventFetcher).toBe(defaultExport);
   });
 
   describe("constructor", () => {
-    it("should require an apiKey and a calendarId", () => {
+    it("requires an apiKey and a calendarId", () => {
       // @ts-expect-error
       expect(() => new GoogleCalendarEventFetcher()).toThrow();
       // @ts-expect-error
@@ -86,7 +86,7 @@ describe("GoogleCalendarEventFetcher", () => {
       expect(() => new GoogleCalendarEventFetcher({ calendarId: CALENDAR_ID })).toThrow();
     });
 
-    it("should accept a fetch function", () => {
+    it("accepts a fetch function", () => {
       const fetch = mockFetch();
 
       new GoogleCalendarEventFetcher({
@@ -98,7 +98,7 @@ describe("GoogleCalendarEventFetcher", () => {
       expect(fetch).not.toHaveBeenCalled();
     });
 
-    it("should require fetch to be a function if provided", () => {
+    it("requires fetch to be a function if provided", () => {
       expect(
         () =>
           new GoogleCalendarEventFetcher({
@@ -110,7 +110,7 @@ describe("GoogleCalendarEventFetcher", () => {
       ).toThrow();
     });
 
-    it("should accept a transform function", () => {
+    it("accepts a transform function", () => {
       new GoogleCalendarEventFetcher({
         apiKey: API_KEY,
         calendarId: CALENDAR_ID,
@@ -118,7 +118,7 @@ describe("GoogleCalendarEventFetcher", () => {
       });
     });
 
-    it("should require transform to be a function if provided", () => {
+    it("requires transform to be a function if provided", () => {
       expect(
         () =>
           new GoogleCalendarEventFetcher({
@@ -132,7 +132,7 @@ describe("GoogleCalendarEventFetcher", () => {
   });
 
   describe("fetchEvents", () => {
-    it("should fetch and transform events within a given range", async () => {
+    it("fetches and transforms events within a given range", async () => {
       /** @satisfies {GoogleCalendarEvents} */
       const mockEvents = {
         kind: "calendar#events",
@@ -163,7 +163,7 @@ describe("GoogleCalendarEventFetcher", () => {
       expect(events).toEqual(["Simple Event 1 (simple1)", "All Day Event 1 (allday1)"]);
     });
 
-    it("should accumulate events across multiple fetches", async () => {
+    it("accumulates events across multiple fetches", async () => {
       /** @satisfies {GoogleCalendarEvents} */
       const firstFetchEvents = {
         kind: "calendar#events",
@@ -192,7 +192,7 @@ describe("GoogleCalendarEventFetcher", () => {
   });
 
   describe("subscribe", () => {
-    it("should notify subscribers with a list of all transformed events", async () => {
+    it("notifies subscribers with a list of all transformed events", async () => {
       /** @satisfies {GoogleCalendarEvents} */
       const firstFetchEvents = {
         kind: "calendar#events",
@@ -226,7 +226,7 @@ describe("GoogleCalendarEventFetcher", () => {
       expect(subscriber).toHaveBeenCalledExactlyOnceWith([EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1, EVENTS.ALL_DAY_2]);
     });
 
-    it("should return an unsubscribe function", async () => {
+    it("returns an unsubscribe function", async () => {
       const fetch = mockFetch();
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
 
