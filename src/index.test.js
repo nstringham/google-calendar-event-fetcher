@@ -157,8 +157,8 @@ describe("GoogleCalendarEventFetcher", () => {
       expect(calledUrl.searchParams.get("timeMax")).toBe(to.toISOString());
 
       expect(transform).toHaveBeenCalledTimes(2);
-      expect(transform).toHaveBeenNthCalledWith(1, mockEvents.items[0]);
-      expect(transform).toHaveBeenNthCalledWith(2, mockEvents.items[1]);
+      expect(transform).toHaveBeenNthCalledWith(1, EVENTS.SIMPLE_1);
+      expect(transform).toHaveBeenNthCalledWith(2, EVENTS.ALL_DAY_1);
 
       expect(events).toEqual(["Simple Event 1 (simple1)", "All Day Event 1 (allday1)"]);
     });
