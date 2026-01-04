@@ -189,6 +189,19 @@ describe("GoogleCalendarEventFetcher", () => {
       expect(secondEvents).toEqual([EVENTS.SIMPLE_1, EVENTS.SIMPLE_2]);
       expect(fetcher.allEvents).toEqual([EVENTS.SIMPLE_1, EVENTS.SIMPLE_2]);
     });
+
+    it("throws when it receives an http error", async () => {
+      const fetch = mockFetch();
+      const transform = vi.fn(transformToString);
+      const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch, transform });
+
+      const failureResponse = new Response(null, { status: 403, statusText: "Forbidden" });
+      fetch.mockResolvedValueOnce(failureResponse);
+
+      expect(fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"))).rejects.toThrow(
+        new Error("Failed to fetch events: 403 Forbidden", { cause: failureResponse }),
+      );
+    });
   });
 
   describe("subscribe", () => {
