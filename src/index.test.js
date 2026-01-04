@@ -227,7 +227,6 @@ describe("GoogleCalendarEventFetcher", () => {
       const firstTo = new Date("2026-01-10T23:59:59Z");
       await fetcher.fetchEvents(firstFrom, firstTo);
 
-      expect(subscriber).toHaveBeenCalledOnce();
       expect(subscriber).toHaveBeenCalledExactlyOnceWith([EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1]);
 
       subscriber.mockClear();
@@ -236,7 +235,6 @@ describe("GoogleCalendarEventFetcher", () => {
       const secondTo = new Date("2026-01-20T23:59:59Z");
       await fetcher.fetchEvents(secondFrom, secondTo);
 
-      expect(subscriber).toHaveBeenCalledOnce();
       expect(subscriber).toHaveBeenCalledExactlyOnceWith([EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1, EVENTS.ALL_DAY_2]);
     });
 
