@@ -3,3 +3,4 @@
 .editorconfig
 eslint.config.js
 tsconfig.json
+vitest.config.js
