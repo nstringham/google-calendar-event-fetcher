@@ -70,7 +70,7 @@ export class GoogleCalendarEventFetcher {
 
   /**
    * Subscribes to events.
-   * @param {(events: T[]) => void} callback The callback to be called when events new are fetched.
+   * @param {(events: T[]) => void} callback The callback to be called when new events are fetched.
    * @returns {() => void} A function to unsubscribe the callback.
    */
   subscribe(callback) {
