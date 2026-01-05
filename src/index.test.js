@@ -206,7 +206,45 @@ describe("GoogleCalendarEventFetcher", () => {
   });
 
   describe("subscribe", () => {
-    it("notifies subscribers with a list of all transformed events", async () => {
+    it("notifies subscribers with no events when they subscribe before fetching", async () => {
+      /** @satisfies {GoogleCalendarEvents} */
+      const firstFetchEvents = {
+        kind: "calendar#events",
+        items: [EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1],
+      };
+
+      const fetch = mockFetch(firstFetchEvents);
+      const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
+
+      const subscriber = vi.fn();
+      fetcher.subscribe(subscriber);
+
+      expect(subscriber).toHaveBeenCalledExactlyOnceWith([]);
+      expect(fetch).not.toHaveBeenCalledOnce();
+    });
+
+    it("notifies subscribers with a list of all events when they subscribe after fetching", async () => {
+      /** @satisfies {GoogleCalendarEvents} */
+      const firstFetchEvents = {
+        kind: "calendar#events",
+        items: [EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1],
+      };
+      const fetch = mockFetch(firstFetchEvents);
+      const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
+
+      const subscriber = vi.fn();
+
+      const firstFrom = new Date("2026-01-01T00:00:00Z");
+      const firstTo = new Date("2026-01-10T23:59:59Z");
+      await fetcher.fetchEvents(firstFrom, firstTo);
+
+      expect(subscriber).not.toHaveBeenCalledOnce();
+      fetcher.subscribe(subscriber);
+
+      expect(subscriber).toHaveBeenCalledExactlyOnceWith([EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1]);
+    });
+
+    it("notifies subscribers with a list of all fetched events", async () => {
       /** @satisfies {GoogleCalendarEvents} */
       const firstFetchEvents = {
         kind: "calendar#events",
@@ -223,12 +261,14 @@ describe("GoogleCalendarEventFetcher", () => {
       const subscriber = vi.fn();
       fetcher.subscribe(subscriber);
 
+      expect(subscriber).toHaveBeenCalledExactlyOnceWith([]);
+      subscriber.mockClear();
+
       const firstFrom = new Date("2026-01-01T00:00:00Z");
       const firstTo = new Date("2026-01-10T23:59:59Z");
       await fetcher.fetchEvents(firstFrom, firstTo);
 
       expect(subscriber).toHaveBeenCalledExactlyOnceWith([EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1]);
-
       subscriber.mockClear();
 
       const secondFrom = new Date("2026-01-11T00:00:00Z");
@@ -244,6 +284,9 @@ describe("GoogleCalendarEventFetcher", () => {
 
       const subscriber = vi.fn();
       const unsubscribe = fetcher.subscribe(subscriber);
+
+      expect(subscriber).toHaveBeenCalledOnce();
+      subscriber.mockClear();
 
       await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
 

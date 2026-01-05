@@ -76,6 +76,7 @@ export class GoogleCalendarEventFetcher {
    */
   subscribe(callback) {
     this.#subscribers.add(callback);
+    this.#notifySubscribers();
     return () => {
       this.#subscribers.delete(callback);
     };
