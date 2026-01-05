@@ -199,9 +199,9 @@ describe("GoogleCalendarEventFetcher", () => {
       const failureResponse = new Response(null, { status: 403, statusText: "Forbidden" });
       fetch.mockResolvedValueOnce(failureResponse);
 
-      expect(fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"))).rejects.toThrow(
-        new Error("Failed to fetch events: 403 Forbidden", { cause: failureResponse }),
-      );
+      await expect(
+        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z")),
+      ).rejects.toThrow(new Error("Failed to fetch events: 403 Forbidden", { cause: failureResponse }));
     });
   });
 
