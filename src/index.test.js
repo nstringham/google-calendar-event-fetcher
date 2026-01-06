@@ -10,6 +10,7 @@ const CALENDAR_ID = "example_calendar@group.calendar.google.com";
 /**
  * Creates a mock for the fetch function.
  * @param {GoogleCalendarEvents[]} responses
+ * @description Each time the mock function is called, it returns the next response from the arguments. When there are no responses left, the function will return an empty response.
  */
 function mockFetch(...responses) {
   /** @type {Mock<(url: URL) => Promise<Response>>} */
@@ -19,6 +20,77 @@ function mockFetch(...responses) {
   }
   return mock;
 }
+
+describe("mockFetch", () => {
+  it("returns empty responses when called with no arguments", async () => {
+    const fetch = mockFetch();
+
+    const firstResponse = await fetch(new URL("https://example.com"));
+
+    expect(firstResponse).toBeInstanceOf(Response);
+    const firstBody = await firstResponse.json();
+    expect(firstBody).toEqual({ kind: "calendar#events", items: [] });
+
+    const secondResponse = await fetch(new URL("https://example.com"));
+
+    expect(secondResponse).toBeInstanceOf(Response);
+    const secondBody = await secondResponse.json();
+    expect(secondBody).toEqual({ kind: "calendar#events", items: [] });
+  });
+
+  it("returns single response", async () => {
+    /** @satisfies {GoogleCalendarEvents} */
+    const mockEvents = {
+      kind: "calendar#events",
+      items: [EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1],
+    };
+    const fetch = mockFetch(mockEvents);
+
+    const firstResponse = await fetch(new URL("https://example.com"));
+
+    expect(firstResponse).toBeInstanceOf(Response);
+    const firstBody = await firstResponse.json();
+    expect(firstBody).toEqual({ kind: "calendar#events", items: [EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1] });
+
+    const secondResponse = await fetch(new URL("https://example.com"));
+
+    expect(secondResponse).toBeInstanceOf(Response);
+    const secondBody = await secondResponse.json();
+    expect(secondBody).toEqual({ kind: "calendar#events", items: [] });
+  });
+
+  it("returns multiple responses", async () => {
+    /** @satisfies {GoogleCalendarEvents} */
+    const firstFetchEvents = {
+      kind: "calendar#events",
+      items: [EVENTS.SIMPLE_1],
+    };
+    /** @satisfies {GoogleCalendarEvents} */
+    const secondFetchEvents = {
+      kind: "calendar#events",
+      items: [EVENTS.SIMPLE_2],
+    };
+    const fetch = mockFetch(firstFetchEvents, secondFetchEvents);
+
+    const firstResponse = await fetch(new URL("https://example.com/1"));
+
+    expect(firstResponse).toBeInstanceOf(Response);
+    const firstBody = await firstResponse.json();
+    expect(firstBody).toEqual({ kind: "calendar#events", items: [EVENTS.SIMPLE_1] });
+
+    const secondResponse = await fetch(new URL("https://example.com/2"));
+
+    expect(secondResponse).toBeInstanceOf(Response);
+    const secondBody = await secondResponse.json();
+    expect(secondBody).toEqual({ kind: "calendar#events", items: [EVENTS.SIMPLE_2] });
+
+    const thirdResponse = await fetch(new URL("https://example.com/3"));
+
+    expect(thirdResponse).toBeInstanceOf(Response);
+    const thirdBody = await thirdResponse.json();
+    expect(thirdBody).toEqual({ kind: "calendar#events", items: [] });
+  });
+});
 
 /**
  * Transforms an event into a simple string.
