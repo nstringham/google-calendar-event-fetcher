@@ -4,3 +4,4 @@
 eslint.config.js
 tsconfig.json
 vitest.config.js
+google-calendar-event-fetcher-*.tgz
