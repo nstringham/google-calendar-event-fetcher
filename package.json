@@ -30,6 +30,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "prettier": "prettier --check .",
+    "version": "version-changelog CHANGELOG.md && git add CHANGELOG.md",
     "prepack": "npm run build"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.7.4",
     "typescript": "^5.9.3",
+    "version-changelog": "^3.1.1",
     "vitest": "^4.0.16"
   }
 }
