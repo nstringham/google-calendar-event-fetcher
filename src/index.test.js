@@ -304,13 +304,11 @@ describe("GoogleCalendarEventFetcher", () => {
       const fetch = mockFetch(firstFetchEvents);
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
 
-      const subscriber = vi.fn();
-
       const firstFrom = new Date("2026-01-01T00:00:00Z");
       const firstTo = new Date("2026-01-10T23:59:59Z");
       await fetcher.fetchEvents(firstFrom, firstTo);
 
-      expect(subscriber).not.toHaveBeenCalledOnce();
+      const subscriber = vi.fn();
       fetcher.subscribe(subscriber);
 
       expect(subscriber).toHaveBeenCalledExactlyOnceWith([EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1]);
