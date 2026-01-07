@@ -21,8 +21,8 @@ npm install google-calendar-event-fetcher
 import GoogleCalendarEventFetcher from "google-calendar-event-fetcher";
 
 const googleCalendarEventFetcher = new GoogleCalendarEventFetcher({
-  calendarId: "c_1pcp6odi9qfe276tpuob8h00ms@group.calendar.google.com",
-  apiKey: "AIzaSyDHUqblOxNndbN7jUXvoKy8IugKLlSXbkE",
+  calendarId: "your_google_calendar_id@group.calendar.google.com",
+  apiKey: "YOUR_GOOGLE_API_KEY",
   transform: (event) => {
     return {
       title: event.summary,
