@@ -20,6 +20,8 @@ jobs:
       - run: npm pack
       - id: tag_name
         uses: olegtarasov/get-tag@v2.1.4
+        with:
+          tagRegex: v(.*)
       - id: changelog_reader
         uses: mindsers/changelog-reader-action@v2
         with:
