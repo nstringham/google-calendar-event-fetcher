@@ -2,8 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
-    "target": "esnext",
-    "module": "preserve",
+    "module": "nodenext",
     "strict": true,
     "skipLibCheck": true,
     "declaration": true,
