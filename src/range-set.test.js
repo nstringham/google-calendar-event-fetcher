@@ -110,13 +110,20 @@ describe("RangeSet", () => {
     it("adds a range to the set", () => {
       const set = new RangeSet();
 
-      set.addRange([1, 2]);
-      expect(set.ranges).toEqual([[1, 2]]);
-
       set.addRange([5, 6]);
+      expect(set.ranges).toEqual([[5, 6]]);
+
+      set.addRange([1, 2]);
       expect(set.ranges).toEqual([
         [1, 2],
         [5, 6],
+      ]);
+
+      set.addRange([8, 9]);
+      expect(set.ranges).toEqual([
+        [1, 2],
+        [5, 6],
+        [8, 9],
       ]);
 
       set.addRange([3, 4]);
@@ -124,6 +131,7 @@ describe("RangeSet", () => {
         [1, 2],
         [3, 4],
         [5, 6],
+        [8, 9],
       ]);
     });
 
