@@ -1,3 +1,7 @@
+import { RangeSet } from "./range-set.js";
+
+/** @import { Range } from "./range-set.js" */
+
 /**
  * Fetches events from a Google Calendar.
  * @template [T=GoogleCalendarEvent] The type that the fetched events will be mapped to.
@@ -5,8 +9,11 @@
 export class GoogleCalendarEventFetcher {
   #apiKey;
   #calendarId;
+  #alwaysFetchFresh;
   #transform;
   #fetch;
+
+  #requestedRanges = new RangeSet();
 
   /** @type {Map<string, T>} */
   #allEvents = new Map();
@@ -24,12 +31,15 @@ export class GoogleCalendarEventFetcher {
   /**
    * @param {GoogleCalendarEvent extends T ? MakeOptional<Options<T>, "transform"> : Options<T>} options
    */
-  constructor({ apiKey, calendarId, fetch, transform }) {
+  constructor({ apiKey, calendarId, fetch, transform, alwaysFetchFresh }) {
     if (typeof apiKey !== "string" || apiKey == "") {
       throw new Error("apiKey is a required string");
     }
     if (typeof calendarId !== "string" || calendarId == "") {
       throw new Error("calendarId is a required string");
+    }
+    if (alwaysFetchFresh != undefined && typeof alwaysFetchFresh !== "boolean") {
+      throw new Error("alwaysFetchFresh must be a boolean");
     }
     if (fetch != undefined && typeof fetch !== "function") {
       throw new Error("fetch must be a function");
@@ -39,6 +49,7 @@ export class GoogleCalendarEventFetcher {
     }
     this.#apiKey = apiKey;
     this.#calendarId = calendarId;
+    this.#alwaysFetchFresh = alwaysFetchFresh ?? false;
     this.#fetch = fetch ?? globalThis.fetch;
     this.#transform = transform ?? ((event) => /** @type {T} */ (event));
   }
@@ -51,6 +62,11 @@ export class GoogleCalendarEventFetcher {
    * @see https://developers.google.com/workspace/calendar/api/v3/reference/events/list
    */
   async fetchEvents(from, to) {
+    /** @type {Range} */
+    const range = [from.valueOf(), to.valueOf()];
+    if (!this.#alwaysFetchFresh && this.#requestedRanges.hasRange(range)) {
+      return this.allEvents;
+    }
     const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${this.#calendarId}/events`);
     url.searchParams.append("key", this.#apiKey);
     url.searchParams.append("timeMin", from.toISOString());
@@ -65,6 +81,7 @@ export class GoogleCalendarEventFetcher {
     for (const event of events.items) {
       this.#allEvents.set(event.id, this.#transform(event));
     }
+    this.#requestedRanges.addRange(range);
     this.#notifySubscribers();
     return this.allEvents;
   }
@@ -97,6 +114,7 @@ export default GoogleCalendarEventFetcher;
  * @typedef {Object} Options
  * @property {string} apiKey The API key for accessing Google Calendar API.
  * @property {string} calendarId The ID of the Google Calendar to fetch events from.
+ * @property {boolean} [alwaysFetchFresh=false] True if a events should always be re-requested from Google instead of cached.
  * @property {(url: URL) => Promise<Response>} [fetch=fetch] Optional fetch function to use for making HTTP requests.
  * @property {((event: GoogleCalendarEvent) => T)} transform Optional function to transform the fetched events.
  */
