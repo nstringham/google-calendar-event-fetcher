@@ -98,6 +98,13 @@ export default GoogleCalendarEventFetcher;
  */
 
 /**
+ * https://developers.google.com/workspace/calendar/api/v3/reference/events/list#response
+ * @typedef {Object} GoogleCalendarEvents |
+ * @property {"calendar#events"} kind Type of the collection
+ * @property {GoogleCalendarEvent[]} items List of events on the calendar.
+ */
+
+/**
  * https://developers.google.com/workspace/calendar/api/v3/reference/events#resource-representations
  * @typedef {Object} GoogleCalendarEvent
  * @property {"calendar#event"} kind Type of the resource
@@ -105,15 +112,32 @@ export default GoogleCalendarEventFetcher;
  * @property {string} summary Title of the event.
  * @property {string=} description Description of the event. Can contain HTML.
  * @property {string=} location Geographic location of the event as free-form text.
- * @property {{ date: string } | { dateTime: string, timeZone:string }} start The (inclusive) start time of the event.
- * @property {{ date: string } | { dateTime: string, timeZone:string }} end The (exclusive) end time of the event.
+ * @property {GoogleCalendarDate | GoogleCalendarDateTime} start The (inclusive) start time of the event.
+ * @property {GoogleCalendarDate | GoogleCalendarDateTime} end The (exclusive) end time of the event.
+ * @property {GoogleCalendarAttachment[]=} attachments File attachments for the event.
  */
 
 /**
- * https://developers.google.com/workspace/calendar/api/v3/reference/events/list#response
- * @typedef {Object} GoogleCalendarEvents
- * @property {"calendar#events"} kind Type of the collection
- * @property {GoogleCalendarEvent[]} items List of events on the calendar.
+ * The start or end date of an all day event
+ * @typedef {Object} GoogleCalendarDate
+ * @property {string} date The date, in the format "yyyy-mm-dd".
+ */
+
+/**
+ * The start or end time of a non-all day event
+ * @typedef {Object} GoogleCalendarDateTime
+ * @property {string} dateTime The time, as a combined date-time value (formatted according to RFC3339)
+ * @property {string} timeZone The time zone in which the time is specified. (Formatted as an IANA Time Zone Database name, e.g. "Europe/Zurich".)
+ */
+
+/**
+ * A file attached to an event
+ * @typedef {Object} GoogleCalendarAttachment
+ * @property {string} fileId ID of the attached file.
+ * @property {string} fileUrl URL link to the attachment.
+ * @property {string} iconLink URL link to the attachment's icon.
+ * @property {string} mimeType Internet media type (MIME type) of the attachment.
+ * @property {string} title Attachment title.
  */
 
 /**
