@@ -54,6 +54,7 @@ export class GoogleCalendarEventFetcher {
     url.searchParams.append("key", this.#apiKey);
     url.searchParams.append("timeMin", from.toISOString());
     url.searchParams.append("timeMax", to.toISOString());
+    url.searchParams.append("singleEvents", "true");
     const response = await this.#fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch events: ${response.status} ${response.statusText}`, { cause: response });

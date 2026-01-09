@@ -155,6 +155,7 @@ describe("GoogleCalendarEventFetcher", () => {
       expect(calledUrl.searchParams.get("key")).toBe(API_KEY);
       expect(calledUrl.searchParams.get("timeMin")).toBe(from.toISOString());
       expect(calledUrl.searchParams.get("timeMax")).toBe(to.toISOString());
+      expect(calledUrl.searchParams.get("singleEvents")).toBe("true");
 
       expect(transform).toHaveBeenCalledTimes(2);
       expect(transform).toHaveBeenNthCalledWith(1, EVENTS.SIMPLE_1);
