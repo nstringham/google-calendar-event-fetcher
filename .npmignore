@@ -1,8 +1,7 @@
 .github/
-**/*.test.*
 src/
 .editorconfig
 eslint.config.js
 tsconfig.json
-vitest.config.js
+vite.config.js
 google-calendar-event-fetcher-*.tgz

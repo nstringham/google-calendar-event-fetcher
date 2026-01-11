@@ -1,13 +1,18 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "preserve",
+    "module": "esnext",
+    "types": ["vite/client"],
     "skipLibCheck": true,
-    "verbatimModuleSyntax": true,
-    "declaration": true,
-    "declarationMap": true,
-    "outDir": "dist",
 
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
     "strict": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
