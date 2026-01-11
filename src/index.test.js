@@ -296,6 +296,16 @@ describe("GoogleCalendarEventFetcher", () => {
       ).rejects.toThrow(new Error("Failed to fetch events: 403 Forbidden", { cause: failureResponse }));
     });
 
+    it("throws when given an invalid range", async () => {
+      const fetch = mockFetch();
+      const transform = vi.fn(transformToString);
+      const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch, transform });
+
+      await expect(
+        fetcher.fetchEvents(new Date("2026-01-31T23:59:59Z"), new Date("2026-01-01T00:00:00Z")),
+      ).rejects.toThrow("Invalid date range: 'from' must be before 'to'.");
+    });
+
     it("does not refetch events by default", async () => {
       /** @satisfies {GoogleCalendarEvents} */
       const fetchEvents = {
