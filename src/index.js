@@ -15,6 +15,9 @@ export class GoogleCalendarEventFetcher {
 
   #requestedRanges = new RangeSet();
 
+  /** @type {Set<Promise<GoogleCalendarEvents>>} */
+  #pendingRequests = new Set();
+
   /** @type {Map<string, T>} */
   #allEvents = new Map();
 
@@ -67,15 +70,10 @@ export class GoogleCalendarEventFetcher {
     }
     /** @type {Range} */
     const range = [from.valueOf(), to.valueOf()];
-    if (!this.#alwaysFetchFresh && this.#requestedRanges.hasRange(range)) {
-      return this.allEvents;
+    if (this.#alwaysFetchFresh || !this.#requestedRanges.hasRange(range)) {
+      this.#requestEvents(range);
     }
-    const events = await this.#callGoogleApi(from, to);
-    for (const event of events.items) {
-      this.#allEvents.set(event.id, this.#transform(event));
-    }
-    this.#requestedRanges.addRange(range);
-    this.#notifySubscribers();
+    await Promise.all(this.#pendingRequests);
     return this.allEvents;
   }
 
@@ -91,6 +89,28 @@ export class GoogleCalendarEventFetcher {
     return () => {
       this.#subscribers.delete(callback);
     };
+  }
+
+  /**
+   * Requests events for a specific range from the Google Calendar API.
+   * @param {Range} range
+   */
+  async #requestEvents(range) {
+    const pendingRequest = this.#callGoogleApi(new Date(range[0]), new Date(range[1]));
+    try {
+      this.#requestedRanges.addRange(range);
+      this.#pendingRequests.add(pendingRequest);
+      const events = await pendingRequest;
+      for (const event of events.items) {
+        this.#allEvents.set(event.id, this.#transform(event));
+      }
+      this.#notifySubscribers();
+    } catch (error) {
+      this.#requestedRanges.removeRange(range);
+      throw error;
+    } finally {
+      this.#pendingRequests.delete(pendingRequest);
+    }
   }
 
   /**
