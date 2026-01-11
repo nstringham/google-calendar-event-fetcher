@@ -70,17 +70,7 @@ export class GoogleCalendarEventFetcher {
     if (!this.#alwaysFetchFresh && this.#requestedRanges.hasRange(range)) {
       return this.allEvents;
     }
-    const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${this.#calendarId}/events`);
-    url.searchParams.append("key", this.#apiKey);
-    url.searchParams.append("timeMin", from.toISOString());
-    url.searchParams.append("timeMax", to.toISOString());
-    url.searchParams.append("singleEvents", "true");
-    const response = await this.#fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch events: ${response.status} ${response.statusText}`, { cause: response });
-    }
-    /** @type {GoogleCalendarEvents} */
-    const events = await response.json();
+    const events = await this.#callGoogleApi(from, to);
     for (const event of events.items) {
       this.#allEvents.set(event.id, this.#transform(event));
     }
@@ -101,6 +91,25 @@ export class GoogleCalendarEventFetcher {
     return () => {
       this.#subscribers.delete(callback);
     };
+  }
+
+  /**
+   * Makes the actual Google Calendar API call.
+   * @param {Date} min
+   * @param {Date} max
+   * @returns {Promise<GoogleCalendarEvents>}
+   */
+  async #callGoogleApi(min, max) {
+    const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${this.#calendarId}/events`);
+    url.searchParams.append("key", this.#apiKey);
+    url.searchParams.append("timeMin", min.toISOString());
+    url.searchParams.append("timeMax", max.toISOString());
+    url.searchParams.append("singleEvents", "true");
+    const response = await this.#fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch events: ${response.status} ${response.statusText}`, { cause: response });
+    }
+    return response.json();
   }
 
   #notifySubscribers() {

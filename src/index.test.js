@@ -359,6 +359,75 @@ describe("GoogleCalendarEventFetcher", () => {
 
       expect(fetch).toHaveBeenCalledTimes(3);
     });
+
+    it("does not refetch events previously requested accost multiple fetches", async () => {
+      /** @satisfies {GoogleCalendarEvents} */
+      const firstFetchEvents = {
+        kind: "calendar#events",
+        items: [EVENTS.SIMPLE_1],
+      };
+      /** @satisfies {GoogleCalendarEvents} */
+      const secondFetchEvents = {
+        kind: "calendar#events",
+        items: [EVENTS.SIMPLE_2],
+      };
+      const fetch = mockFetch(firstFetchEvents, secondFetchEvents);
+      const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
+
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-11T00:00:00Z"));
+      await fetcher.fetchEvents(new Date("2026-01-11T00:00:00Z"), new Date("2026-01-21T00:00:00Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-21T00:00:00Z"));
+      await fetcher.fetchEvents(new Date("2026-01-08T00:00:00Z"), new Date("2026-01-18T00:00:00Z"));
+
+      expect(fetch).toBeCalledTimes(2);
+      expect(fetcher.allEvents).toEqual([EVENTS.SIMPLE_1, EVENTS.SIMPLE_2]);
+    });
+
+    it("refetches events when previous attempt fails", async () => {
+      const fetch = mockFetch();
+      fetch.mockResolvedValueOnce(Response.error());
+      const fetcher = new GoogleCalendarEventFetcher({
+        apiKey: API_KEY,
+        calendarId: CALENDAR_ID,
+        fetch,
+      });
+
+      await expect(
+        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z")),
+      ).rejects.toThrow();
+      await expect(
+        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z")),
+      ).resolves.toEqual([]);
+      await expect(
+        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z")),
+      ).resolves.toEqual([]);
+
+      expect(fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it("does not refetch events requested in parallel", async () => {
+      /** @satisfies {GoogleCalendarEvents} */
+      const fetchEvents = {
+        kind: "calendar#events",
+        items: [EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1],
+      };
+      const fetch = mockFetch(fetchEvents);
+      const fetcher = new GoogleCalendarEventFetcher({
+        apiKey: API_KEY,
+        calendarId: CALENDAR_ID,
+        fetch,
+      });
+
+      const firstPromise = fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
+      const secondPromise = fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
+      const thirdPromise = fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
+
+      await expect(firstPromise).resolves.toEqual([EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1]);
+      await expect(secondPromise).resolves.toEqual([EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1]);
+      await expect(thirdPromise).resolves.toEqual([EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1]);
+
+      expect(fetch).toHaveBeenCalledOnce();
+    });
   });
 
   describe("subscribe", () => {
