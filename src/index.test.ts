@@ -1,19 +1,20 @@
-import { describe, it, expect, vi } from "vitest";
-import defaultExport, { GoogleCalendarEventFetcher } from "./index.js";
-
-/** @import { Mock } from "vitest" */
-/** @import { GoogleCalendarEvent, GoogleCalendarEvents } from "./index.js"; */
+import { describe, it, expect, vi, type Mock } from "vitest";
+import defaultExport, {
+  GoogleCalendarEventFetcher,
+  type GoogleCalendarEvent,
+  type GoogleCalendarEvents,
+} from "./index.js";
 
 const API_KEY = "example_api_key";
 const CALENDAR_ID = "example_calendar@group.calendar.google.com";
 
 /**
  * Creates a mock for the fetch function.
- * @param {GoogleCalendarEvents[]} responses
  */
-function mockFetch(...responses) {
-  /** @type {Mock<(url: URL) => Promise<Response>>} */
-  const mock = vi.fn(async () => Response.json({ kind: "calendar#events", items: [] }));
+function mockFetch(...responses: GoogleCalendarEvents[]) {
+  const mock: Mock<(url: URL) => Promise<Response>> = vi.fn(async () =>
+    Response.json({ kind: "calendar#events", items: [] }),
+  );
   for (const response of responses) {
     mock.mockResolvedValueOnce(Response.json(response));
   }
@@ -22,14 +23,11 @@ function mockFetch(...responses) {
 
 /**
  * Transforms an event into a simple string.
- * @param {GoogleCalendarEvent} event
- * @returns {string}
  */
-function transformToString(event) {
+function transformToString(event: GoogleCalendarEvent): string {
   return `${event.summary} (${event.id})`;
 }
 
-/** @satisfies {{ [key: string]: GoogleCalendarEvent }} */
 const EVENTS = {
   SIMPLE_1: {
     kind: "calendar#event",
@@ -66,7 +64,7 @@ const EVENTS = {
     start: { dateTime: "2025-02-13T09:00:00Z", timeZone: "America/New_York" },
     end: { dateTime: "2027-08-26T17:00:00Z", timeZone: "America/New_York" },
   },
-};
+} as const satisfies { [key: string]: GoogleCalendarEvent };
 
 describe("GoogleCalendarEventFetcher", () => {
   it("is exported as default and with a name", () => {
@@ -133,8 +131,7 @@ describe("GoogleCalendarEventFetcher", () => {
 
   describe("fetchEvents", () => {
     it("fetches and transforms events within a given range", async () => {
-      /** @satisfies {GoogleCalendarEvents} */
-      const mockEvents = {
+      const mockEvents: GoogleCalendarEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1],
       };
@@ -165,13 +162,11 @@ describe("GoogleCalendarEventFetcher", () => {
     });
 
     it("accumulates events across multiple fetches", async () => {
-      /** @satisfies {GoogleCalendarEvents} */
-      const firstFetchEvents = {
+      const firstFetchEvents: GoogleCalendarEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_1],
       };
-      /** @satisfies {GoogleCalendarEvents} */
-      const secondFetchEvents = {
+      const secondFetchEvents: GoogleCalendarEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_2],
       };
@@ -207,13 +202,11 @@ describe("GoogleCalendarEventFetcher", () => {
 
   describe("subscribe", () => {
     it("notifies subscribers with a list of all transformed events", async () => {
-      /** @satisfies {GoogleCalendarEvents} */
-      const firstFetchEvents = {
+      const firstFetchEvents: GoogleCalendarEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1],
       };
-      /** @satisfies {GoogleCalendarEvents} */
-      const secondFetchEvents = {
+      const secondFetchEvents: GoogleCalendarEvents = {
         kind: "calendar#events",
         items: [EVENTS.ALL_DAY_2, EVENTS.VERY_LONG_1],
       };

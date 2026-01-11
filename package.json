@@ -21,9 +21,10 @@
     "url": "https://github.com/nstringham"
   },
   "type": "module",
-  "main": "src/index.js",
-  "types": "types/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "dev": "tsc --watch",
     "build": "tsc",
     "test": "vitest",
     "coverage": "vitest run --coverage",

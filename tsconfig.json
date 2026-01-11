@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
     "target": "esnext",
     "module": "preserve",
-    "strict": true,
     "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
     "declaration": true,
-    "emitDeclarationOnly": true,
     "declarationMap": true,
-    "outDir": "types"
+    "outDir": "dist",
+
+    "strict": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
   },
-  "include": ["src/**/*.js"]
+  "include": ["src"]
 }

@@ -1,5 +1,6 @@
 .github/
 **/*.test.*
+src/
 .editorconfig
 eslint.config.js
 tsconfig.json
