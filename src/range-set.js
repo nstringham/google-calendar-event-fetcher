@@ -30,6 +30,27 @@ export class RangeSet {
   }
 
   /**
+   * Checks if a range is completely covered by the set.
+   * @param {Range} range
+   * @returns {boolean}
+   */
+  hasRange(range) {
+    if (!isValidRange(range)) {
+      throw new Error("Invalid Range");
+    }
+
+    const [start, end] = range;
+
+    const lowerBound = this.#getLowerBoundIndex(start);
+
+    if (lowerBound == null || lowerBound % 2 != 0) {
+      return false;
+    }
+
+    return end <= this.#ranges[lowerBound + 1];
+  }
+
+  /**
    * Adds a range to the set.
    * @param {Range} range
    */
@@ -64,27 +85,6 @@ export class RangeSet {
     }
 
     this.#ranges.splice(firstDeleteIndex, lastDeleteIndex - firstDeleteIndex + 1, ...newValues);
-  }
-
-  /**
-   * Checks if a range is completely covered by the set.
-   * @param {Range} range
-   * @returns {boolean}
-   */
-  hasRange(range) {
-    if (!isValidRange(range)) {
-      throw new Error("Invalid Range");
-    }
-
-    const [start, end] = range;
-
-    const lowerBound = this.#getLowerBoundIndex(start);
-
-    if (lowerBound == null || lowerBound % 2 != 0) {
-      return false;
-    }
-
-    return end <= this.#ranges[lowerBound + 1];
   }
 
   /**
