@@ -292,7 +292,7 @@ describe("GoogleCalendarEventFetcher", () => {
       fetcher.subscribe(subscriber);
 
       expect(subscriber).toHaveBeenCalledExactlyOnceWith([]);
-      expect(fetch).not.toHaveBeenCalledOnce();
+      expect(fetch).not.toHaveBeenCalled();
     });
 
     it("notifies subscribers with a list of all events when they subscribe after fetching", async () => {
