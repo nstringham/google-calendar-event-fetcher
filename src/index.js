@@ -62,6 +62,9 @@ export class GoogleCalendarEventFetcher {
    * @see https://developers.google.com/workspace/calendar/api/v3/reference/events/list
    */
   async fetchEvents(from, to) {
+    if (from >= to) {
+      throw new Error("Invalid date range: 'from' must be before 'to'.");
+    }
     /** @type {Range} */
     const range = [from.valueOf(), to.valueOf()];
     if (!this.#alwaysFetchFresh && this.#requestedRanges.hasRange(range)) {
