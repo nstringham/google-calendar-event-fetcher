@@ -242,4 +242,83 @@ describe("RangeSet", () => {
       expect(() => set.addRange([3, 2])).toThrow("Invalid Range");
     });
   });
+
+  describe("removeRange", () => {
+    it("removes a range from the set", () => {
+      const set = new RangeSet([
+        [1, 2],
+        [3, 4],
+        [5, 6],
+        [8, 9],
+      ]);
+
+      set.removeRange([3, 4]);
+      expect(set.ranges).toEqual([
+        [1, 2],
+        [5, 6],
+        [8, 9],
+      ]);
+
+      set.removeRange([8, 9]);
+      expect(set.ranges).toEqual([
+        [1, 2],
+        [5, 6],
+      ]);
+
+      set.removeRange([1, 2]);
+      expect(set.ranges).toEqual([[5, 6]]);
+
+      set.removeRange([5, 6]);
+      expect(set.ranges).toEqual([]);
+    });
+
+    it("dose nothing when removing a range that doesn't exist", () => {
+      const set = new RangeSet([[1, 2]]);
+
+      set.removeRange([1, 2]);
+      expect(set.ranges).toEqual([]);
+
+      set.removeRange([1, 2]);
+      expect(set.ranges).toEqual([]);
+    });
+
+    it("deletes ranges within deleted range", () => {
+      const set = new RangeSet([[1, 8]]);
+
+      set.removeRange([3, 7]);
+      expect(set.ranges).toEqual([
+        [1, 3],
+        [7, 8],
+      ]);
+
+      set.removeRange([6, 8]);
+      expect(set.ranges).toEqual([[1, 3]]);
+
+      set.removeRange([2, 4]);
+      expect(set.ranges).toEqual([[1, 2]]);
+
+      set.removeRange([1, 3]);
+      expect(set.ranges).toEqual([]);
+    });
+
+    it("deletes multiple overlapping ranges", () => {
+      const set = new RangeSet([
+        [1, 2],
+        [3, 4],
+        [5, 6],
+        [8, 9],
+      ]);
+
+      set.removeRange([2, 8]);
+      expect(set.ranges).toEqual([
+        [1, 1],
+        [9, 9],
+      ]);
+    });
+
+    it("throws an error if an invalid range is removed", () => {
+      const set = new RangeSet();
+      expect(() => set.removeRange([3, 2])).toThrow("Invalid Range");
+    });
+  });
 });
