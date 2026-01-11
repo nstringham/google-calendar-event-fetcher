@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][]
 
+### Changed
+
+- Subscriber is now notified immediately upon subscribing
+
 ### Fixed
 
 - Separate recurring events into individual instances
