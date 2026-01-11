@@ -73,10 +73,11 @@ export class GoogleCalendarEventFetcher {
    * Subscribes to events.
    * @param {(events: T[]) => void} callback The callback to be called when new events are fetched.
    * @returns {() => void} A function to unsubscribe the callback.
+   * @note When subscribed, `callback` is immediately called.
    */
   subscribe(callback) {
     this.#subscribers.add(callback);
-    this.#notifySubscribers();
+    callback(this.allEvents);
     return () => {
       this.#subscribers.delete(callback);
     };
