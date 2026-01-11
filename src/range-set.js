@@ -88,6 +88,41 @@ export class RangeSet {
   }
 
   /**
+   * Remove range from the set.
+   * @param {Range} range
+   */
+  removeRange(range) {
+    if (!isValidRange(range)) {
+      throw new Error("Invalid Range");
+    }
+
+    const [start, end] = range;
+
+    const firstDeleteIndex = this.#getUpperBoundIndex(start);
+    if (firstDeleteIndex == null) {
+      return;
+    }
+
+    const lastDeleteIndex = this.#getLowerBoundIndex(end);
+    if (lastDeleteIndex == null) {
+      return;
+    }
+
+    /** @type {number[]} */
+    const newValues = [];
+
+    if (firstDeleteIndex % 2 != 0) {
+      newValues.push(start);
+    }
+
+    if (lastDeleteIndex % 2 == 0) {
+      newValues.push(end);
+    }
+
+    this.#ranges.splice(firstDeleteIndex, lastDeleteIndex - firstDeleteIndex + 1, ...newValues);
+  }
+
+  /**
    * Gets the index of the largest value in `#ranges` that is less than or equal to a given value
    * @param {number} target the value to find
    * @returns {number|null} the index of the largest value that is less than or equal to the target value

@@ -272,7 +272,7 @@ describe("RangeSet", () => {
       expect(set.ranges).toEqual([]);
     });
 
-    it("dose nothing when removing a range that doesn't exist", () => {
+    it("does nothing when removing a range that doesn't exist", () => {
       const set = new RangeSet([[1, 2]]);
 
       set.removeRange([1, 2]);
@@ -282,7 +282,7 @@ describe("RangeSet", () => {
       expect(set.ranges).toEqual([]);
     });
 
-    it("deletes ranges within deleted range", () => {
+    it("deletes ranges within existing range", () => {
       const set = new RangeSet([[1, 8]]);
 
       set.removeRange([3, 7]);
@@ -309,10 +309,10 @@ describe("RangeSet", () => {
         [8, 9],
       ]);
 
-      set.removeRange([2, 8]);
+      set.removeRange([1.5, 8.5]);
       expect(set.ranges).toEqual([
-        [1, 1],
-        [9, 9],
+        [1, 1.5],
+        [8.5, 9],
       ]);
     });
 
