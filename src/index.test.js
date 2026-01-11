@@ -280,12 +280,12 @@ describe("GoogleCalendarEventFetcher", () => {
   describe("subscribe", () => {
     it("notifies subscribers with no events when they subscribe before fetching", async () => {
       /** @satisfies {GoogleCalendarEvents} */
-      const firstFetchEvents = {
+      const fetchEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1],
       };
 
-      const fetch = mockFetch(firstFetchEvents);
+      const fetch = mockFetch(fetchEvents);
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
 
       const subscriber = vi.fn();
@@ -297,16 +297,16 @@ describe("GoogleCalendarEventFetcher", () => {
 
     it("notifies subscribers with a list of all events when they subscribe after fetching", async () => {
       /** @satisfies {GoogleCalendarEvents} */
-      const firstFetchEvents = {
+      const fetchEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1],
       };
-      const fetch = mockFetch(firstFetchEvents);
+      const fetch = mockFetch(fetchEvents);
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
 
-      const firstFrom = new Date("2026-01-01T00:00:00Z");
-      const firstTo = new Date("2026-01-10T23:59:59Z");
-      await fetcher.fetchEvents(firstFrom, firstTo);
+      const from = new Date("2026-01-01T00:00:00Z");
+      const to = new Date("2026-01-10T23:59:59Z");
+      await fetcher.fetchEvents(from, to);
 
       const subscriber = vi.fn();
       fetcher.subscribe(subscriber);
