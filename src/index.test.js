@@ -40,11 +40,11 @@ describe("mockFetch", () => {
 
   it("returns non-empty response", async () => {
     /** @satisfies {GoogleCalendarEvents} */
-    const mockEvents = {
+    const fetchEvents = {
       kind: "calendar#events",
       items: [EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1],
     };
-    const fetch = mockFetch(mockEvents);
+    const fetch = mockFetch(fetchEvents);
 
     const firstResponse = await fetch(new URL("https://example.com"));
 
@@ -61,16 +61,16 @@ describe("mockFetch", () => {
 
   it("returns multiple non-empty responses", async () => {
     /** @satisfies {GoogleCalendarEvents} */
-    const firstMockEvents = {
+    const firstFetchEvents = {
       kind: "calendar#events",
       items: [EVENTS.SIMPLE_1],
     };
     /** @satisfies {GoogleCalendarEvents} */
-    const secondMockEvents = {
+    const secondFetchEvents = {
       kind: "calendar#events",
       items: [EVENTS.SIMPLE_2],
     };
-    const fetch = mockFetch(firstMockEvents, secondMockEvents);
+    const fetch = mockFetch(firstFetchEvents, secondFetchEvents);
 
     const firstResponse = await fetch(new URL("https://example.com/1"));
 
@@ -206,11 +206,11 @@ describe("GoogleCalendarEventFetcher", () => {
   describe("fetchEvents", () => {
     it("fetches and transforms events within a given range", async () => {
       /** @satisfies {GoogleCalendarEvents} */
-      const mockEvents = {
+      const fetchEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1],
       };
-      const fetch = mockFetch(mockEvents);
+      const fetch = mockFetch(fetchEvents);
       const transform = vi.fn(transformToString);
 
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch, transform });
@@ -238,16 +238,16 @@ describe("GoogleCalendarEventFetcher", () => {
 
     it("accumulates events across multiple fetches", async () => {
       /** @satisfies {GoogleCalendarEvents} */
-      const firstMockEvents = {
+      const firstFetchEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_1],
       };
       /** @satisfies {GoogleCalendarEvents} */
-      const secondMockEvents = {
+      const secondFetchEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_2],
       };
-      const fetch = mockFetch(firstMockEvents, secondMockEvents);
+      const fetch = mockFetch(firstFetchEvents, secondFetchEvents);
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
 
       const firstFrom = new Date("2026-01-01T00:00:00Z");
@@ -280,12 +280,12 @@ describe("GoogleCalendarEventFetcher", () => {
   describe("subscribe", () => {
     it("notifies subscribers with no events when they subscribe before fetching", () => {
       /** @satisfies {GoogleCalendarEvents} */
-      const mockEvents = {
+      const fetchEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1],
       };
 
-      const fetch = mockFetch(mockEvents);
+      const fetch = mockFetch(fetchEvents);
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
 
       const subscriber = vi.fn();
@@ -297,11 +297,11 @@ describe("GoogleCalendarEventFetcher", () => {
 
     it("notifies subscribers with a list of all events when they subscribe after fetching", async () => {
       /** @satisfies {GoogleCalendarEvents} */
-      const mockEvents = {
+      const fetchEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1],
       };
-      const fetch = mockFetch(mockEvents);
+      const fetch = mockFetch(fetchEvents);
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
 
       const from = new Date("2026-01-01T00:00:00Z");
@@ -316,16 +316,16 @@ describe("GoogleCalendarEventFetcher", () => {
 
     it("notifies subscribers with a list of all fetched events", async () => {
       /** @satisfies {GoogleCalendarEvents} */
-      const firstMockEvents = {
+      const firstFetchEvents = {
         kind: "calendar#events",
         items: [EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1],
       };
       /** @satisfies {GoogleCalendarEvents} */
-      const secondMockEvents = {
+      const secondFetchEvents = {
         kind: "calendar#events",
         items: [EVENTS.ALL_DAY_2, EVENTS.VERY_LONG_1],
       };
-      const fetch = mockFetch(firstMockEvents, secondMockEvents);
+      const fetch = mockFetch(firstFetchEvents, secondFetchEvents);
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
 
       const subscriber = vi.fn();
