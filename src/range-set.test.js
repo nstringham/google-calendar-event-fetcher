@@ -274,6 +274,12 @@ describe("RangeSet", () => {
     it("does nothing when removing a range that doesn't exist", () => {
       const set = new RangeSet([[1, 2]]);
 
+      set.removeRange([-1, 0]);
+      expect(set.ranges).toEqual([[1, 2]]);
+
+      set.removeRange([3, 4]);
+      expect(set.ranges).toEqual([[1, 2]]);
+
       set.removeRange([1, 2]);
       expect(set.ranges).toEqual([]);
 
