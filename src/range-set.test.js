@@ -320,4 +320,73 @@ describe("RangeSet", () => {
       expect(() => set.removeRange([3, 2])).toThrow("Invalid Range");
     });
   });
+
+  describe("intersection", () => {
+    it("returns a copy when intersecting with itself", () => {
+      const set = new RangeSet([
+        [1, 5],
+        [7, 8],
+      ]);
+
+      const intersection = set.intersection(set);
+      expect(intersection).not.toBe(set);
+      expect(intersection.ranges).toEqual(set.ranges);
+    });
+
+    it("returns an empty set when either set is empty", () => {
+      const a = new RangeSet();
+      const b = new RangeSet([
+        [1, 5],
+        [7, 8],
+      ]);
+
+      expect(a.intersection(b).ranges).toEqual([]);
+      expect(b.intersection(a).ranges).toEqual([]);
+    });
+
+    it("returns an empty set when there is no overlap", () => {
+      const a = new RangeSet([
+        [1, 2],
+        [5, 6],
+      ]);
+      const b = new RangeSet([
+        [3, 4],
+        [7, 8],
+      ]);
+
+      expect(a.intersection(b).ranges).toEqual([]);
+      expect(b.intersection(a).ranges).toEqual([]);
+    });
+
+    it("returns an empty set when ranges are adjacent", () => {
+      const a = new RangeSet([
+        [1, 3],
+        [4, 6],
+      ]);
+      const b = new RangeSet([
+        [3, 4],
+        [6, 8],
+      ]);
+
+      expect(a.intersection(b).ranges).toEqual([]);
+      expect(b.intersection(a).ranges).toEqual([]);
+    });
+
+    it("returns the intersection of two overlapping sets", () => {
+      const a = new RangeSet([
+        [1, 5],
+        [7, 8],
+      ]);
+      const b = new RangeSet([[3, 8]]);
+
+      expect(a.intersection(b).ranges).toEqual([
+        [3, 5],
+        [7, 8],
+      ]);
+      expect(b.intersection(a).ranges).toEqual([
+        [3, 5],
+        [7, 8],
+      ]);
+    });
+  });
 });

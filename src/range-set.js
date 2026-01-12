@@ -123,6 +123,39 @@ export class RangeSet {
   }
 
   /**
+   * Create a new set containing elements in both this set and the given set.
+   * @param {RangeSet} other
+   * @returns {RangeSet} The intersection of `this` and `other`
+   */
+  intersection(other) {
+    const intersection = new RangeSet();
+
+    const rangesA = this.#ranges;
+    const rangesB = other.#ranges;
+
+    let indexA = this.#getLowerBoundIndex(other.#ranges[0]) ?? 0;
+    let indexB = other.#getLowerBoundIndex(this.#ranges[0]) ?? 0;
+
+    while (indexA < rangesA.length && indexB < rangesB.length) {
+      const a = rangesA[indexA];
+      const b = rangesB[indexB];
+      if (a < b || (a == b && indexA % 2 != 0)) {
+        if (indexB % 2 != 0) {
+          intersection.#ranges.push(a);
+        }
+        indexA++;
+      } else {
+        if (indexA % 2 != 0) {
+          intersection.#ranges.push(b);
+        }
+        indexB++;
+      }
+    }
+
+    return intersection;
+  }
+
+  /**
    * Gets the index of the largest value in `#ranges` that is less than or equal to a given value
    * @param {number} target the value to find
    * @returns {number|null} the index of the largest value that is less than or equal to the target value
