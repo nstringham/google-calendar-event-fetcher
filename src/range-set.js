@@ -196,7 +196,7 @@ export function isValidRange(range) {
     range.length === 2 &&
     typeof range[0] === "number" &&
     typeof range[1] === "number" &&
-    range[0] <= range[1]
+    range[0] < range[1]
   );
 }
 
