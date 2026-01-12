@@ -383,6 +383,32 @@ describe("GoogleCalendarEventFetcher", () => {
       expect(fetcher.allEvents).toEqual([EVENTS.SIMPLE_1, EVENTS.SIMPLE_2]);
     });
 
+    it("requests only the ranges that have not been requested previously", async () => {
+      const fetch = mockFetch();
+      const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
+
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-05T00:00:00Z"));
+      expect(fetch).toHaveBeenCalledTimes(1);
+      await fetcher.fetchEvents(new Date("2026-01-02T00:00:00Z"), new Date("2026-01-05T00:00:00Z"));
+      expect(fetch).toHaveBeenCalledTimes(1);
+      await fetcher.fetchEvents(new Date("2026-01-10T00:00:00Z"), new Date("2026-01-12T00:00:00Z"));
+      expect(fetch).toHaveBeenCalledTimes(2);
+      await fetcher.fetchEvents(new Date("2026-01-14T00:00:00Z"), new Date("2026-01-18T00:00:00Z"));
+      expect(fetch).toHaveBeenCalledTimes(3);
+      await fetcher.fetchEvents(new Date("2026-01-03T00:00:00Z"), new Date("2026-01-16T00:00:00Z"));
+      expect(fetch).toHaveBeenCalledTimes(5);
+
+      const calls = fetch.mock.calls.map(([url]) => ({
+        timeMin: url.searchParams.get("timeMin"),
+        timeMax: url.searchParams.get("timeMax"),
+      }));
+      expect(calls[0]).toEqual({ timeMin: "2026-01-01T00:00:00.000Z", timeMax: "2026-01-05T00:00:00.000Z" });
+      expect(calls[1]).toEqual({ timeMin: "2026-01-10T00:00:00.000Z", timeMax: "2026-01-12T00:00:00.000Z" });
+      expect(calls[2]).toEqual({ timeMin: "2026-01-14T00:00:00.000Z", timeMax: "2026-01-18T00:00:00.000Z" });
+      expect(calls[3]).toEqual({ timeMin: "2026-01-05T00:00:00.000Z", timeMax: "2026-01-10T00:00:00.000Z" });
+      expect(calls[4]).toEqual({ timeMin: "2026-01-12T00:00:00.000Z", timeMax: "2026-01-14T00:00:00.000Z" });
+    });
+
     it("refetches events when previous attempt fails", async () => {
       const fetch = mockFetch();
       const failureResponse = new Response(null, { status: 403, statusText: "Forbidden" });
