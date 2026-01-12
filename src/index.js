@@ -73,12 +73,11 @@ export class GoogleCalendarEventFetcher {
     if (this.#alwaysFetchFresh) {
       await this.#requestEvents(range);
     } else {
+      const existingRequests = Promise.all(this.#pendingRequests);
       const missingRanges = this.#requestedRanges.inverse().intersection(new RangeSet([range]));
-      for (const range of missingRanges) {
-        this.#requestEvents(range);
-      }
+      await Promise.all(missingRanges.ranges.map((range) => this.#requestEvents(range)));
+      await existingRequests;
     }
-    await Promise.all(this.#pendingRequests);
     return this.allEvents;
   }
 
