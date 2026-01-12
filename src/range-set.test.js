@@ -7,15 +7,12 @@ describe("isValidRange", () => {
   it("returns true for valid ranges", () => {
     expect(isValidRange([1, 2])).toBe(true);
     expect(isValidRange([18, 56789])).toBe(true);
-    expect(isValidRange([1, 1])).toBe(true);
-    expect(isValidRange([0, 0])).toBe(true);
     expect(isValidRange([-1000, -100])).toBe(true);
     expect(isValidRange([Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER])).toBe(true);
     expect(isValidRange([-Number.MIN_VALUE, Number.MIN_VALUE])).toBe(true);
     expect(isValidRange([-Number.EPSILON, Number.EPSILON])).toBe(true);
     expect(isValidRange([-Number.MAX_VALUE, Number.MAX_VALUE])).toBe(true);
     expect(isValidRange([Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY])).toBe(true);
-    expect(isValidRange([-0, 0])).toBe(true);
   });
 
   it("returns false for invalid ranges", () => {
@@ -25,6 +22,8 @@ describe("isValidRange", () => {
     expect(isValidRange(["1", "2"])).toBe(false);
     expect(isValidRange({ [0]: 1, [1]: 2, length: 2 })).toBe(false);
     expect(isValidRange([new Date(), new Date()])).toBe(false);
+    expect(isValidRange([1, 1])).toBe(false);
+    expect(isValidRange([-0, 0])).toBe(false);
     expect(isValidRange([2, 1])).toBe(false);
     expect(isValidRange([NaN, NaN])).toBe(false);
     expect(isValidRange([Number.MIN_VALUE, -Number.MIN_VALUE])).toBe(false);
