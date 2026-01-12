@@ -123,6 +123,22 @@ export class RangeSet {
   }
 
   /**
+   * Creates a new set containing all the elements not contained in this set.
+   * @returns {RangeSet} The inverse of `this`
+   */
+  inverse() {
+    const inverse = new RangeSet();
+    inverse.#ranges = [Number.NEGATIVE_INFINITY, ...this.#ranges, Number.POSITIVE_INFINITY];
+    if (inverse.#ranges[0] == inverse.#ranges[1]) {
+      inverse.#ranges.splice(0, 2);
+    }
+    if (inverse.#ranges.at(-1) == inverse.#ranges.at(-2)) {
+      inverse.#ranges.splice(inverse.#ranges.length - 2);
+    }
+    return inverse;
+  }
+
+  /**
    * Create a new set containing elements in both this set and the given set.
    * @param {RangeSet} other
    * @returns {RangeSet} The intersection of `this` and `other`
