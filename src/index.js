@@ -70,8 +70,13 @@ export class GoogleCalendarEventFetcher {
     }
     /** @type {Range} */
     const range = [from.valueOf(), to.valueOf()];
-    if (this.#alwaysFetchFresh || !this.#requestedRanges.hasRange(range)) {
-      this.#requestEvents(range);
+    if (this.#alwaysFetchFresh) {
+      await this.#requestEvents(range);
+    } else {
+      const missingRanges = this.#requestedRanges.inverse().intersection(new RangeSet([range]));
+      for (const range of missingRanges) {
+        this.#requestEvents(range);
+      }
     }
     await Promise.all(this.#pendingRequests);
     return this.allEvents;

@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Subscriber is now notified immediately upon subscribing
-- By default `fetchEvents` now only fetches a range of events if it has not already been fetched
+- By default `fetchEvents` now only fetches a ranges of events that have not already been fetched
 
 ### Fixed
 
