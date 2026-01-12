@@ -389,4 +389,30 @@ describe("RangeSet", () => {
       ]);
     });
   });
+
+  describe("inverse", () => {
+    it("inverts an empty set", () => {
+      const set = new RangeSet();
+
+      expect(set.inverse().ranges).toEqual([[Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY]]);
+      expect(set.inverse().inverse().ranges).toEqual(set.ranges);
+    });
+
+    it("inverts a complex set", () => {
+      const set = new RangeSet([
+        [1, 2],
+        [3, 4],
+        [5, 6],
+        [Number.MAX_VALUE, Number.POSITIVE_INFINITY],
+      ]);
+
+      expect(set.inverse().ranges).toEqual([
+        [Number.NEGATIVE_INFINITY, 1],
+        [2, 3],
+        [4, 5],
+        [6, Number.MAX_VALUE],
+      ]);
+      expect(set.inverse().inverse().ranges).toEqual(set.ranges);
+    });
+  });
 });
