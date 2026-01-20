@@ -25,16 +25,16 @@
   "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "default": "./src/index.js",
-      "types": "./types/index.d.ts"
+      "types": "./types/index.d.ts",
+      "default": "./src/index.js"
     },
     "./range-set": {
-      "default": "./src/range-set.js",
-      "types": "./types/range-set.d.ts"
+      "types": "./types/range-set.d.ts",
+      "default": "./src/range-set.js"
     },
     "./fullcalendar": {
-      "default": "./src/fullcalendar/index.js",
-      "types": "./types/fullcalendar/index.d.ts"
+      "types": "./types/fullcalendar/index.d.ts",
+      "default": "./src/fullcalendar/index.js"
     }
   },
   "scripts": {
