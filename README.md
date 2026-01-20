@@ -6,6 +6,7 @@ Fetch and transform events from the Google Calendar API
 
 - Get events from Google Calendar
 - Transform Events into a form that works for you application
+- Only fetch each event once
 - Subscribe to the full list of all events for reactivity
 - TypeScript Types
 
