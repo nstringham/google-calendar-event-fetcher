@@ -4,15 +4,15 @@ import defaultExport, { GoogleCalendarEventFetcher } from "./index.js";
 /** @import { Mock } from "vitest" */
 /** @import { GoogleCalendarEvent, GoogleCalendarEvents } from "./index.js"; */
 
-const API_KEY = "example_api_key";
-const CALENDAR_ID = "example_calendar@group.calendar.google.com";
+export const API_KEY = "example_api_key";
+export const CALENDAR_ID = "example_calendar@group.calendar.google.com";
 
 /**
  * Creates a mock for the fetch function.
  * @param {GoogleCalendarEvents[]} responses
  * @description Each time the mock function is called, it returns the next response from the arguments. When there are no responses left, the function will return an empty response.
  */
-function mockFetch(...responses) {
+export function mockFetch(...responses) {
   /** @type {Mock<(url: URL) => Promise<Response>>} */
   const mock = vi.fn(async () => Response.json({ kind: "calendar#events", items: [] }));
   for (const response of responses) {
@@ -102,7 +102,7 @@ function transformToString(event) {
 }
 
 /** @satisfies {{ [key: string]: GoogleCalendarEvent }} */
-const EVENTS = {
+export const EVENTS = {
   SIMPLE_1: {
     kind: "calendar#event",
     id: "simple1",
