@@ -23,6 +23,20 @@
   "type": "module",
   "main": "src/index.js",
   "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "default": "./src/index.js",
+      "types": "./types/index.d.ts"
+    },
+    "./range-set": {
+      "default": "./src/range-set.js",
+      "types": "./types/range-set.d.ts"
+    },
+    "./fullcalendar": {
+      "default": "./src/fullcalendar/index.js",
+      "types": "./types/fullcalendar/index.d.ts"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "test": "vitest",
@@ -34,8 +48,17 @@
     "version": "version-changelog CHANGELOG.md && git add CHANGELOG.md",
     "prepack": "npm run build"
   },
+  "peerDependencies": {
+    "@fullcalendar/core": "^6.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@fullcalendar/core": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@fullcalendar/core": "^6.1.20",
     "@vitest/browser-playwright": "^4.0.17",
     "@vitest/coverage-v8": "^4.0.17",
     "eslint": "^9.39.2",
