@@ -10,5 +10,5 @@
     "declarationMap": true,
     "outDir": "types"
   },
-  "include": ["src/**/*.js"]
+  "include": ["src/**/*.js", "src/fullcalendar/ambient.ts"]
 }
