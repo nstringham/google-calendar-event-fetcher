@@ -40,3 +40,23 @@ googleCalendarEventFetcher.subscribe((events) => {
 
 googleCalendarEventFetcher.fetchEvents(new Date("2026-01-01"), new Date("2026-01-31"));
 ```
+
+## Example Usage with FullCalendar
+
+```js
+import { Calendar } from "@fullcalendar/core";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import googleCalendarPlugin from "google-calendar-event-fetcher/fullcalendar";
+
+const calendarElement = document.getElementById("calendar");
+const calendar = new Calendar(calendarElement, {
+  plugins: [dayGridPlugin, googleCalendarPlugin],
+  initialView: "dayGridMonth",
+  events: {
+    googleCalendarId: "your_google_calendar_id@group.calendar.google.com",
+    googleCalendarApiKey: "YOUR_GOOGLE_API_KEY",
+  },
+});
+
+calendar.render();
+```
