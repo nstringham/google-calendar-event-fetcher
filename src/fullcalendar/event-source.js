@@ -11,8 +11,8 @@ import { GoogleCalendarEventFetcher } from "../index.js";
  */
 
 /** @type {EventSourceDef<GoogleCalendarEventSourceMeta>} */
-export const eventSource = {
-  parseMeta: ({ googleCalendarId, googleCalendarApiKey }) => {
+export const eventSourceDef = {
+  parseMeta: ({ googleCalendarId, googleCalendarApiKey, customFetch }) => {
     if (googleCalendarId == undefined) {
       return null;
     }
@@ -25,6 +25,7 @@ export const eventSource = {
       eventFetcher: new GoogleCalendarEventFetcher({
         apiKey: googleCalendarApiKey,
         calendarId: googleCalendarId,
+        fetch: customFetch,
         transform,
       }),
     };
