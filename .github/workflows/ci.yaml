@@ -58,7 +58,7 @@ jobs:
       - run: npm ci
       - run: npm test
 
-  coverage:
+  test-browser:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -67,4 +67,16 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run coverage
+      - run: npx playwright install --with-deps
+      - run: npm run test:browser
+
+  test-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:coverage
