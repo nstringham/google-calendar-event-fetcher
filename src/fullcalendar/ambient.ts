@@ -7,4 +7,8 @@ declare module "@fullcalendar/core/internal" {
   interface EventSourceRefiners extends GoogleCalendarEventSourceRefiners {}
 }
 
-export type GoogleCalendarEventSource = Required<RawOptionsFromRefiners<GoogleCalendarEventSourceRefiners>>;
+export type GoogleCalendarEventSource = RawOptionsFromRefiners<GoogleCalendarEventSourceRefiners> &
+  Pick<
+    Required<RawOptionsFromRefiners<GoogleCalendarEventSourceRefiners>>,
+    "googleCalendarId" | "googleCalendarApiKey"
+  >;
