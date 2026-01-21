@@ -65,7 +65,7 @@ describe("fullcalendar plugin", () => {
       it("calls fetchEvents and passes the events to the success callback", async () => {
         const fetch = mockFetch({
           kind: "calendar#events",
-          items: [EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1],
+          items: [EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1, EVENTS.DETAILED_1],
         });
 
         /** @type {GoogleCalendarEventSource} */
@@ -93,18 +93,37 @@ describe("fullcalendar plugin", () => {
           expect(successCallback).toHaveBeenCalledExactlyOnceWith({
             rawEvents: [
               {
+                title: "Simple Event 1",
                 allDay: false,
+                start: "2026-01-03T12:00:00Z",
                 end: "2026-01-03T13:00:00Z",
                 extendedProps: {},
-                start: "2026-01-03T12:00:00Z",
-                title: "Simple Event 1",
               },
               {
+                title: "All Day Event 1",
                 allDay: true,
+                start: "2026-01-15",
                 end: "2026-01-16",
                 extendedProps: {},
-                start: "2026-01-15",
-                title: "All Day Event 1",
+              },
+              {
+                title: "Detailed Event 1",
+                allDay: false,
+                start: "2026-01-22T03:00:00Z",
+                end: "2026-01-22T03:30:00Z",
+                extendedProps: {
+                  description: "A detailed event with <b>lots<b/> of details.",
+                  location: "1600 Amphitheatre Parkway, Mountain View, CA 94043-1351, USA",
+                  attachments: [
+                    {
+                      title: "More Details.pdf",
+                      fileUrl: "https://drive.google.com/open?id=moreDetails",
+                      mimeType: "application/pdf",
+                      iconLink: "https://drive-thirdparty.googleusercontent.com/32/type/application/pdf",
+                      fileId: "moreDetails",
+                    },
+                  ],
+                },
               },
             ],
           });
