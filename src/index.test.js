@@ -109,6 +109,7 @@ export const EVENTS = {
     summary: "Simple Event 1",
     start: { dateTime: "2026-01-03T12:00:00Z", timeZone: "America/New_York" },
     end: { dateTime: "2026-01-03T13:00:00Z", timeZone: "America/New_York" },
+    htmlLink: "https://www.google.com/calendar/event?eid=simple1",
   },
   SIMPLE_2: {
     kind: "calendar#event",
@@ -116,6 +117,7 @@ export const EVENTS = {
     summary: "Simple Event 2",
     start: { dateTime: "2026-01-12T06:00:00Z", timeZone: "America/New_York" },
     end: { dateTime: "2026-01-12T08:30:00Z", timeZone: "America/New_York" },
+    htmlLink: "https://www.google.com/calendar/event?eid=simple2",
   },
   ALL_DAY_1: {
     kind: "calendar#event",
@@ -123,6 +125,7 @@ export const EVENTS = {
     summary: "All Day Event 1",
     start: { date: "2026-01-15" },
     end: { date: "2026-01-16" },
+    htmlLink: "https://www.google.com/calendar/event?eid=allday1",
   },
   ALL_DAY_2: {
     kind: "calendar#event",
@@ -130,6 +133,7 @@ export const EVENTS = {
     summary: "All Day Event 2",
     start: { date: "2026-01-20" },
     end: { date: "2026-01-21" },
+    htmlLink: "https://www.google.com/calendar/event?eid=allday2",
   },
   VERY_LONG_1: {
     kind: "calendar#event",
@@ -137,6 +141,7 @@ export const EVENTS = {
     summary: "Very Long Event 1",
     start: { dateTime: "2025-02-13T09:00:00Z", timeZone: "America/New_York" },
     end: { dateTime: "2027-08-26T17:00:00Z", timeZone: "America/New_York" },
+    htmlLink: "https://www.google.com/calendar/event?eid=verylong1",
   },
 };
 
