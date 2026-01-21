@@ -173,6 +173,7 @@ export default GoogleCalendarEventFetcher;
  * @property {GoogleCalendarDate | GoogleCalendarDateTime} start The (inclusive) start time of the event.
  * @property {GoogleCalendarDate | GoogleCalendarDateTime} end The (exclusive) end time of the event.
  * @property {GoogleCalendarAttachment[]=} attachments File attachments for the event.
+ * @property {string} htmlLink An absolute link to this event in the Google Calendar Web UI.
  */
 
 /**
