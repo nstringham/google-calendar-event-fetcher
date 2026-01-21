@@ -143,6 +143,25 @@ export const EVENTS = {
     end: { dateTime: "2027-08-26T17:00:00Z", timeZone: "America/New_York" },
     htmlLink: "https://www.google.com/calendar/event?eid=verylong1",
   },
+  DETAILED_1: {
+    kind: "calendar#event",
+    id: "detailed1",
+    summary: "Detailed Event 1",
+    start: { dateTime: "2026-01-22T03:00:00Z", timeZone: "America/New_York" },
+    end: { dateTime: "2026-01-22T03:30:00Z", timeZone: "America/New_York" },
+    description: "A detailed event with <b>lots<b/> of details.",
+    location: "1600 Amphitheatre Parkway, Mountain View, CA 94043-1351, USA",
+    attachments: [
+      {
+        title: "More Details.pdf",
+        fileUrl: "https://drive.google.com/open?id=moreDetails",
+        mimeType: "application/pdf",
+        iconLink: "https://drive-thirdparty.googleusercontent.com/32/type/application/pdf",
+        fileId: "moreDetails",
+      },
+    ],
+    htmlLink: "https://www.google.com/calendar/event?eid=detailed1",
+  },
 };
 
 describe("GoogleCalendarEventFetcher", () => {
