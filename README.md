@@ -38,7 +38,7 @@ googleCalendarEventFetcher.subscribe((events) => {
   console.log("All events:", events);
 });
 
-googleCalendarEventFetcher.fetchEvents(new Date("2026-01-01"), new Date("2026-01-31"));
+googleCalendarEventFetcher.fetchEvents(new Date("2026-01-01"), new Date("2026-02-01"));
 ```
 
 ## Example Usage with FullCalendar
