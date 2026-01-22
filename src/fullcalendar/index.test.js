@@ -77,7 +77,7 @@ describe("fullcalendar plugin", () => {
         const meta = /** @type {GoogleCalendarEventSourceMeta} */ (eventSourceDef.parseMeta(eventSource));
 
         const from = new Date("2026-01-01T00:00:00Z");
-        const to = new Date("2026-01-31T23:59:59Z");
+        const to = new Date("2026-02-01T00:00:00Z");
         const successCallback = vi.fn();
         const errorCallback = vi.fn();
 
@@ -144,7 +144,7 @@ describe("fullcalendar plugin", () => {
         const meta = /** @type {GoogleCalendarEventSourceMeta} */ (eventSourceDef.parseMeta(eventSource));
 
         const from = new Date("2026-01-01T00:00:00Z");
-        const to = new Date("2026-01-31T23:59:59Z");
+        const to = new Date("2026-02-01T00:00:00Z");
         const successCallback = vi.fn();
         const errorCallback = vi.fn();
 

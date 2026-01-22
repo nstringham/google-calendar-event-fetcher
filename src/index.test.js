@@ -260,7 +260,7 @@ describe("GoogleCalendarEventFetcher", () => {
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch, transform });
 
       const from = new Date("2026-01-01T00:00:00Z");
-      const to = new Date("2026-01-31T23:59:59Z");
+      const to = new Date("2026-02-01T00:00:00Z");
 
       const events = await fetcher.fetchEvents(from, to);
 
@@ -295,13 +295,13 @@ describe("GoogleCalendarEventFetcher", () => {
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
 
       const firstFrom = new Date("2026-01-01T00:00:00Z");
-      const firstTo = new Date("2026-01-10T23:59:59Z");
+      const firstTo = new Date("2026-01-11T00:00:00Z");
       const firstEvents = await fetcher.fetchEvents(firstFrom, firstTo);
       expect(firstEvents).toEqual([EVENTS.SIMPLE_1]);
       expect(fetcher.allEvents).toEqual([EVENTS.SIMPLE_1]);
 
       const secondFrom = new Date("2026-01-11T00:00:00Z");
-      const secondTo = new Date("2026-01-20T23:59:59Z");
+      const secondTo = new Date("2026-01-21T00:00:00Z");
       const secondEvents = await fetcher.fetchEvents(secondFrom, secondTo);
       expect(secondEvents).toEqual([EVENTS.SIMPLE_1, EVENTS.SIMPLE_2]);
       expect(fetcher.allEvents).toEqual([EVENTS.SIMPLE_1, EVENTS.SIMPLE_2]);
@@ -316,7 +316,7 @@ describe("GoogleCalendarEventFetcher", () => {
       fetch.mockResolvedValueOnce(failureResponse);
 
       await expect(
-        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z")),
+        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z")),
       ).rejects.toThrow(new Error("Failed to fetch events: 403 Forbidden", { cause: failureResponse }));
     });
 
@@ -326,7 +326,7 @@ describe("GoogleCalendarEventFetcher", () => {
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch, transform });
 
       await expect(
-        fetcher.fetchEvents(new Date("2026-01-31T23:59:59Z"), new Date("2026-01-01T00:00:00Z")),
+        fetcher.fetchEvents(new Date("2026-02-01T00:00:00Z"), new Date("2026-01-01T00:00:00Z")),
       ).rejects.toThrow("Invalid date range: 'from' must be before 'to'.");
     });
 
@@ -343,9 +343,9 @@ describe("GoogleCalendarEventFetcher", () => {
       fetcher.subscribe(subscriber);
       subscriber.mockClear();
 
-      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
-      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
-      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
 
       expect(fetch).toHaveBeenCalledOnce();
       expect(transform).toHaveBeenCalledOnce();
@@ -361,9 +361,9 @@ describe("GoogleCalendarEventFetcher", () => {
         alwaysFetchFresh: false,
       });
 
-      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
-      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
-      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
 
       expect(fetch).toHaveBeenCalledOnce();
     });
@@ -377,9 +377,9 @@ describe("GoogleCalendarEventFetcher", () => {
         alwaysFetchFresh: true,
       });
 
-      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
-      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
-      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
 
       expect(fetch).toHaveBeenCalledTimes(3);
     });
@@ -444,13 +444,13 @@ describe("GoogleCalendarEventFetcher", () => {
       });
 
       await expect(
-        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z")),
+        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z")),
       ).rejects.toThrow("Failed to fetch events: 403 Forbidden");
       await expect(
-        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z")),
+        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z")),
       ).resolves.toEqual([]);
       await expect(
-        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z")),
+        fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z")),
       ).resolves.toEqual([]);
 
       expect(fetch).toHaveBeenCalledTimes(2);
@@ -469,9 +469,9 @@ describe("GoogleCalendarEventFetcher", () => {
         fetch,
       });
 
-      const firstPromise = fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
-      const secondPromise = fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
-      const thirdPromise = fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
+      const firstPromise = fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
+      const secondPromise = fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
+      const thirdPromise = fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
 
       await expect(firstPromise).resolves.toEqual([EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1]);
       await expect(secondPromise).resolves.toEqual([EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1]);
@@ -509,7 +509,7 @@ describe("GoogleCalendarEventFetcher", () => {
       const fetcher = new GoogleCalendarEventFetcher({ apiKey: API_KEY, calendarId: CALENDAR_ID, fetch });
 
       const from = new Date("2026-01-01T00:00:00Z");
-      const to = new Date("2026-01-10T23:59:59Z");
+      const to = new Date("2026-01-11T00:00:00Z");
       await fetcher.fetchEvents(from, to);
 
       const subscriber = vi.fn();
@@ -539,14 +539,14 @@ describe("GoogleCalendarEventFetcher", () => {
       subscriber.mockClear();
 
       const firstFrom = new Date("2026-01-01T00:00:00Z");
-      const firstTo = new Date("2026-01-10T23:59:59Z");
+      const firstTo = new Date("2026-01-11T00:00:00Z");
       await fetcher.fetchEvents(firstFrom, firstTo);
 
       expect(subscriber).toHaveBeenCalledExactlyOnceWith([EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1]);
       subscriber.mockClear();
 
       const secondFrom = new Date("2026-01-11T00:00:00Z");
-      const secondTo = new Date("2026-01-20T23:59:59Z");
+      const secondTo = new Date("2026-01-21T00:00:00Z");
       await fetcher.fetchEvents(secondFrom, secondTo);
 
       expect(subscriber).toHaveBeenCalledExactlyOnceWith([EVENTS.SIMPLE_1, EVENTS.VERY_LONG_1, EVENTS.ALL_DAY_2]);
@@ -566,7 +566,7 @@ describe("GoogleCalendarEventFetcher", () => {
       fetcher.subscribe(firstSubscriber);
 
       const from = new Date("2026-01-01T00:00:00Z");
-      const to = new Date("2026-01-10T23:59:59Z");
+      const to = new Date("2026-01-11T00:00:00Z");
       await fetcher.fetchEvents(from, to);
 
       expect(firstSubscriber).toHaveBeenCalledWith([EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1]);
@@ -589,14 +589,14 @@ describe("GoogleCalendarEventFetcher", () => {
       expect(subscriber).toHaveBeenCalledOnce();
       subscriber.mockClear();
 
-      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-31T23:59:59Z"));
+      await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-02-01T00:00:00Z"));
 
       expect(subscriber).toHaveBeenCalledOnce();
       subscriber.mockClear();
 
       unsubscribe();
 
-      await fetcher.fetchEvents(new Date("2026-02-01T00:00:00Z"), new Date("2026-02-28T23:59:59Z"));
+      await fetcher.fetchEvents(new Date("2026-02-01T00:00:00Z"), new Date("2026-03-01T00:00:00Z"));
 
       expect(subscriber).not.toHaveBeenCalled();
     });
