@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { refineProps } from "@fullcalendar/core/internal";
-import { API_KEY, CALENDAR_ID, EVENTS, mockFetch } from "../index.test.js";
-import GoogleCalendarEventFetcher from "../index.js";
+import { API_KEY, CALENDAR_ID, EVENTS, mockFetch } from "../mocks.test.js";
+import { GoogleCalendarEventFetcher } from "../event-fetcher.js";
 import plugin, { type GoogleCalendarEventSource } from "./index.js";
 import { eventSourceDef } from "./event-source.js";
 
