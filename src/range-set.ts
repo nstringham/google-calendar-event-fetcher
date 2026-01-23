@@ -4,12 +4,10 @@ export class RangeSet {
    * Each even index is the start of a range.
    * Each odd index is the end of a range.
    * Ranges are arranged in ascending order.
-   * @type {number[]}
    */
-  #ranges = [];
+  #ranges: number[] = [];
 
-  /** @param {Iterable<Range>} ranges*/
-  constructor(ranges = []) {
+  constructor(ranges: Iterable<Range> = []) {
     for (const range of ranges) {
       this.addRange(range);
     }
@@ -17,24 +15,18 @@ export class RangeSet {
 
   *[Symbol.iterator]() {
     for (let i = 0; i < this.#ranges.length; i += 2) {
-      yield /** @type {Range} */ ([this.#ranges[i], this.#ranges[i + 1]]);
+      yield [this.#ranges[i], this.#ranges[i + 1]] as Range;
     }
   }
 
-  /**
-   * An array with the ranges in the set.
-   * @type {Range[]}
-   */
-  get ranges() {
+  get ranges(): Range[] {
     return [...this];
   }
 
   /**
    * Checks if a range is completely covered by the set.
-   * @param {Range} range
-   * @returns {boolean}
    */
-  hasRange(range) {
+  hasRange(range: Range): boolean {
     if (!isValidRange(range)) {
       throw new Error("Invalid Range");
     }
@@ -52,9 +44,8 @@ export class RangeSet {
 
   /**
    * Adds a range to the set.
-   * @param {Range} range
    */
-  addRange(range) {
+  addRange(range: Range) {
     if (!isValidRange(range)) {
       throw new Error("Invalid Range");
     }
@@ -73,8 +64,7 @@ export class RangeSet {
       return;
     }
 
-    /** @type {number[]} */
-    const newValues = [];
+    const newValues: number[] = [];
 
     if (firstDeleteIndex % 2 == 0) {
       newValues.push(start);
@@ -89,9 +79,8 @@ export class RangeSet {
 
   /**
    * Remove range from the set.
-   * @param {Range} range
    */
-  removeRange(range) {
+  removeRange(range: Range) {
     if (!isValidRange(range)) {
       throw new Error("Invalid Range");
     }
@@ -108,8 +97,7 @@ export class RangeSet {
       return;
     }
 
-    /** @type {number[]} */
-    const newValues = [];
+    const newValues: number[] = [];
 
     if (firstDeleteIndex % 2 != 0) {
       newValues.push(start);
@@ -124,9 +112,9 @@ export class RangeSet {
 
   /**
    * Creates a new set containing all the elements not contained in this set.
-   * @returns {RangeSet} The inverse of `this`
+   * @returns The inverse of `this`
    */
-  inverse() {
+  inverse(): RangeSet {
     const inverse = new RangeSet();
     inverse.#ranges = [Number.NEGATIVE_INFINITY, ...this.#ranges, Number.POSITIVE_INFINITY];
     if (inverse.#ranges[0] == inverse.#ranges[1]) {
@@ -140,10 +128,9 @@ export class RangeSet {
 
   /**
    * Create a new set containing elements in both this set and the given set.
-   * @param {RangeSet} other
-   * @returns {RangeSet} The intersection of `this` and `other`
+   * @returns The intersection of `this` and `other`
    */
-  intersection(other) {
+  intersection(other: RangeSet): RangeSet {
     const intersection = new RangeSet();
 
     const rangesA = this.#ranges;
@@ -173,11 +160,11 @@ export class RangeSet {
 
   /**
    * Gets the index of the largest value in `#ranges` that is less than or equal to a given value
-   * @param {number} target the value to find
-   * @returns {number|null} the index of the largest value that is less than or equal to the target value
+   * @param target the value to find
+   * @returns the index of the largest value that is less than or equal to the target value
    * or null if the target value smaller than the smallest value
    */
-  #getLowerBoundIndex(target) {
+  #getLowerBoundIndex(target: number): number | null {
     if (this.#ranges.length == 0 || this.#ranges[0] > target) {
       return null;
     }
@@ -204,11 +191,11 @@ export class RangeSet {
 
   /**
    * Gets the index of the smallest value in `#ranges` that is greater than or equal to a given value
-   * @param {number} target the value to find
-   * @returns {number|null} the index of the smallest value that is greater than or equal to the target value
+   * @param target the value to find
+   * @returns the index of the smallest value that is greater than or equal to the target value
    * or null if the target value larger than the largest value
    */
-  #getUpperBoundIndex(target) {
+  #getUpperBoundIndex(target: number): number | null {
     if (this.#ranges.length == 0 || this.#ranges[this.#ranges.length - 1] < target) {
       return null;
     }
@@ -236,10 +223,8 @@ export class RangeSet {
 
 /**
  * check if an object is a valid range
- * @param {unknown} range
- * @returns {range is Range}
  */
-export function isValidRange(range) {
+export function isValidRange(range: unknown): range is Range {
   return (
     Array.isArray(range) &&
     range.length === 2 &&
@@ -249,4 +234,4 @@ export function isValidRange(range) {
   );
 }
 
-/** @typedef {[start: number, end: number]} Range */
+export type Range = [start: number, end: number];

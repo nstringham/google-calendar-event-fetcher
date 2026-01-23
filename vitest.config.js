@@ -3,6 +3,7 @@ import { playwright } from "@vitest/browser-playwright";
 
 export default defineConfig({
   test: {
+    include: ["**/*.test.ts"],
     coverage: {
       provider: "v8",
       reportOnFailure: true,

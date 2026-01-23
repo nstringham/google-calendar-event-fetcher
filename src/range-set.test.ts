@@ -1,8 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { isValidRange, RangeSet } from "./range-set.js";
 
-/** @import { Range } from "./range-set.js" */
-
 describe("isValidRange", () => {
   it("returns true for valid ranges", () => {
     expect(isValidRange([1, 2])).toBe(true);
