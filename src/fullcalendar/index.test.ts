@@ -2,17 +2,13 @@ import { describe, expect, it, vi } from "vitest";
 import { refineProps } from "@fullcalendar/core/internal";
 import { API_KEY, CALENDAR_ID, EVENTS, mockFetch } from "../index.test.js";
 import GoogleCalendarEventFetcher from "../index.js";
-import plugin from "./index.js";
+import plugin, { type GoogleCalendarEventSource } from "./index.js";
 import { eventSourceDef } from "./event-source.js";
-
-/** @import { GoogleCalendarEventSource } from "./index.js" */
-/** @import { GoogleCalendarEventSourceMeta } from "./event-source.js" */
 
 describe("fullcalendar plugin", () => {
   describe("eventSourceRefiners", () => {
     it("refines options for in calendar id and api key", () => {
-      /** @type {GoogleCalendarEventSource} */
-      const raw = {
+      const raw: GoogleCalendarEventSource = {
         googleCalendarId: CALENDAR_ID,
         googleCalendarApiKey: API_KEY,
       };
@@ -48,16 +44,15 @@ describe("fullcalendar plugin", () => {
       });
 
       it("constructs an event fetcher instance", () => {
-        /** @type {GoogleCalendarEventSource} */
-        const eventSource = {
+        const eventSource: GoogleCalendarEventSource = {
           googleCalendarId: CALENDAR_ID,
           googleCalendarApiKey: API_KEY,
         };
 
-        const meta = /** @type {GoogleCalendarEventSourceMeta} */ (eventSourceDef.parseMeta(eventSource));
+        const meta = eventSourceDef.parseMeta(eventSource);
 
         expect(meta).not.toBeNull();
-        expect(meta.eventFetcher).toBeInstanceOf(GoogleCalendarEventFetcher);
+        expect(meta!.eventFetcher).toBeInstanceOf(GoogleCalendarEventFetcher);
       });
     });
 
@@ -68,13 +63,12 @@ describe("fullcalendar plugin", () => {
           items: [EVENTS.SIMPLE_1, EVENTS.ALL_DAY_1, EVENTS.DETAILED_1],
         });
 
-        /** @type {GoogleCalendarEventSource} */
-        const eventSource = {
+        const eventSource: GoogleCalendarEventSource = {
           googleCalendarId: CALENDAR_ID,
           googleCalendarApiKey: API_KEY,
           customFetch: fetch,
         };
-        const meta = /** @type {GoogleCalendarEventSourceMeta} */ (eventSourceDef.parseMeta(eventSource));
+        const meta = eventSourceDef.parseMeta(eventSource);
 
         const from = new Date("2026-01-01T00:00:00Z");
         const to = new Date("2026-02-01T00:00:00Z");
@@ -135,13 +129,12 @@ describe("fullcalendar plugin", () => {
         const fetch = mockFetch();
         fetch.mockRejectedValueOnce(new Error("mock error"));
 
-        /** @type {GoogleCalendarEventSource} */
-        const eventSource = {
+        const eventSource: GoogleCalendarEventSource = {
           googleCalendarId: CALENDAR_ID,
           googleCalendarApiKey: API_KEY,
           customFetch: fetch,
         };
-        const meta = /** @type {GoogleCalendarEventSourceMeta} */ (eventSourceDef.parseMeta(eventSource));
+        const meta = eventSourceDef.parseMeta(eventSource);
 
         const from = new Date("2026-01-01T00:00:00Z");
         const to = new Date("2026-02-01T00:00:00Z");

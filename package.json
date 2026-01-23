@@ -21,20 +21,20 @@
     "url": "https://github.com/nstringham"
   },
   "type": "module",
-  "main": "src/index.js",
-  "types": "types/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "default": "./src/index.js"
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
     },
     "./range-set": {
-      "types": "./types/range-set.d.ts",
-      "default": "./src/range-set.js"
+      "types": "./lib/range-set.d.ts",
+      "default": "./lib/range-set.js"
     },
     "./fullcalendar": {
-      "types": "./types/fullcalendar/index.d.ts",
-      "default": "./src/fullcalendar/index.js"
+      "types": "./lib/fullcalendar/index.d.ts",
+      "default": "./lib/fullcalendar/index.js"
     }
   },
   "scripts": {

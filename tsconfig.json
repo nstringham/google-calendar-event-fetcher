@@ -1,14 +1,12 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
     "module": "nodenext",
     "strict": true,
+    "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "declaration": true,
-    "emitDeclarationOnly": true,
     "declarationMap": true,
-    "outDir": "types"
+    "outDir": "lib"
   },
-  "include": ["src/**/*.js", "src/fullcalendar/ambient.ts"]
+  "include": ["src/**/*.ts"]
 }

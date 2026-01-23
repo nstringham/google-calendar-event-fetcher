@@ -1,17 +1,15 @@
-import { GoogleCalendarEventFetcher } from "../index.js";
-
-/** @import { GoogleCalendarEvent } from "../index.js" */
-/** @import { EventInput } from "@fullcalendar/core" */
-/** @import { EventSourceDef } from "@fullcalendar/core/internal" */
+import { GoogleCalendarEventFetcher, type GoogleCalendarEvent } from "../index.js";
+import type { EventInput } from "@fullcalendar/core";
+import type { EventSourceDef } from "@fullcalendar/core/internal";
 
 /**
  * The data needed by an instance of a FullCalendar event source
- * @typedef {Object} GoogleCalendarEventSourceMeta
- * @property {GoogleCalendarEventFetcher<EventInput>} eventFetcher
  */
+export type GoogleCalendarEventSourceMeta = {
+  eventFetcher: GoogleCalendarEventFetcher<EventInput>;
+};
 
-/** @type {EventSourceDef<GoogleCalendarEventSourceMeta>} */
-export const eventSourceDef = {
+export const eventSourceDef: EventSourceDef<GoogleCalendarEventSourceMeta> = {
   parseMeta: ({ googleCalendarId, googleCalendarApiKey, customFetch }) => {
     if (googleCalendarId == undefined) {
       return null;
@@ -40,11 +38,16 @@ export const eventSourceDef = {
 };
 
 /**
- * Transforms Google Calendar Events into FullCalendar events
- * @param {GoogleCalendarEvent} event
- * @returns {EventInput}
+ * Transforms Google Calendar Events into FullCalendar events.
  */
-export function transform({ summary, description, start, end, location, attachments }) {
+export function transform({
+  summary,
+  description,
+  start,
+  end,
+  location,
+  attachments,
+}: GoogleCalendarEvent): EventInput {
   return {
     title: summary,
     allDay: "date" in start,
