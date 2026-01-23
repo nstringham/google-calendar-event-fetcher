@@ -8,6 +8,7 @@ export default defineConfig([
   {
     rules: {
       "no-undef": "off",
+      curly: "error",
     },
   },
 ]);
