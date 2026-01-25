@@ -1,5 +1,5 @@
 import { RangeSet, type Range } from "./range-set.js";
-import { type GoogleCalendarEvent, type GoogleCalendarEvents } from "./google-calendar.js";
+import type { GoogleCalendarEvent, GoogleCalendarEvents } from "./google-calendar.js";
 
 /**
  * Fetches events from a Google Calendar.
