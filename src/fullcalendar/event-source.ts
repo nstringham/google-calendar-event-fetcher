@@ -1,4 +1,5 @@
-import { GoogleCalendarEventFetcher, type GoogleCalendarEvent } from "../index.js";
+import { GoogleCalendarEventFetcher } from "../event-fetcher.js";
+import type { GoogleCalendarEvent } from "../google-calendar.js";
 import type { EventInput } from "@fullcalendar/core";
 import type { EventSourceDef } from "@fullcalendar/core/internal";
 
