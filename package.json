@@ -5,7 +5,8 @@
   "keywords": [
     "google",
     "calendar",
-    "google-calendar"
+    "google-calendar",
+    "fullcalendar"
   ],
   "homepage": "https://github.com/nstringham/google-calendar-event-fetcher#readme",
   "bugs": {
