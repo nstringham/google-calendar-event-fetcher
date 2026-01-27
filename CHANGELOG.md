@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - FullCalendar plugin
 
+### Changed
+
+- `GoogleCalendarEvent` now specifies that an event must be either all day of timed but not a mixture
+
 ## [0.1.0][] - 2026-01-12
 
 ### Added

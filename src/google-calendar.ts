@@ -11,7 +11,7 @@ export type GoogleCalendarEvents = {
 /**
  * https://developers.google.com/workspace/calendar/api/v3/reference/events#resource-representations
  */
-export type GoogleCalendarEvent = {
+export type GoogleCalendarEventTemplate<DateType extends GoogleCalendarDate | GoogleCalendarDateTime> = {
   /** Type of the resource. */
   kind: "calendar#event";
   /** Opaque identifier of the event. */
@@ -23,14 +23,20 @@ export type GoogleCalendarEvent = {
   /** Geographic location of the event as free-form text. */
   location?: string;
   /** The (inclusive) start time of the event. */
-  start: GoogleCalendarDate | GoogleCalendarDateTime;
+  start: DateType;
   /** The (exclusive) end time of the event. */
-  end: GoogleCalendarDate | GoogleCalendarDateTime;
+  end: DateType;
   /** File attachments for the event. */
   attachments?: GoogleCalendarAttachment[];
   /** An absolute link to this event in the Google Calendar Web UI. */
   htmlLink: string;
 };
+
+export type GoogleCalendarAllDayEvent = GoogleCalendarEventTemplate<GoogleCalendarDate>;
+
+export type GoogleCalendarTimedEvent = GoogleCalendarEventTemplate<GoogleCalendarDateTime>;
+
+export type GoogleCalendarEvent = GoogleCalendarAllDayEvent | GoogleCalendarTimedEvent;
 
 /**
  * The start or end date of an all day event
