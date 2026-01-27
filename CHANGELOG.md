@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - FullCalendar plugin
+- `isAllDayEvent` utility function
+- `convertToDate` utility function
 
 ### Changed
 

@@ -19,7 +19,7 @@ npm install google-calendar-event-fetcher
 ## Example Usage
 
 ```js
-import GoogleCalendarEventFetcher from "google-calendar-event-fetcher";
+import { GoogleCalendarEventFetcher, isAllDayEvent, convertToDate } from "google-calendar-event-fetcher";
 
 const googleCalendarEventFetcher = new GoogleCalendarEventFetcher({
   calendarId: "your_google_calendar_id@group.calendar.google.com",
@@ -27,8 +27,9 @@ const googleCalendarEventFetcher = new GoogleCalendarEventFetcher({
   transform: (event) => {
     return {
       title: event.summary,
-      start: new Date(event.start.dateTime ?? event.start.date),
-      end: new Date(event.end.dateTime ?? event.end.date),
+      allDay: isAllDayEvent(event),
+      start: convertToDate(event.start),
+      end: convertToDate(event.end),
       description: event.description,
     };
   },

@@ -71,3 +71,17 @@ export type GoogleCalendarAttachment = {
   /** Attachment title. */
   title: string;
 };
+
+/**
+ * Checks if an event from google calendar is an all day event
+ */
+export function isAllDayEvent(event: GoogleCalendarEvent): event is GoogleCalendarAllDayEvent {
+  return "date" in event.start;
+}
+
+/**
+ * Converts a google calendar event start or end to a JavaScript Date object
+ */
+export function convertToDate(date: GoogleCalendarDate | GoogleCalendarDateTime): Date {
+  return new Date("date" in date ? date.date : date.dateTime);
+}
