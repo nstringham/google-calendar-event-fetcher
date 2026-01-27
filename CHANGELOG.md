@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][]
 
+## [0.2.0][] - 2026-01-27
+
 ### Added
 
 - FullCalendar plugin
@@ -41,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Option to transform events
 - Ability to subscribe to all events
 
-[Unreleased]: https://github.com/nstringham/google-calendar-event-fetcher/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/nstringham/google-calendar-event-fetcher/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/nstringham/google-calendar-event-fetcher/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/nstringham/google-calendar-event-fetcher/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/nstringham/google-calendar-event-fetcher/tree/v0.0.1
