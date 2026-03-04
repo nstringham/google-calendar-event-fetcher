@@ -8,13 +8,10 @@ import type { GoogleCalendarEvent, GoogleCalendarEvents } from "./google-calenda
 export class GoogleCalendarEventFetcher<T = GoogleCalendarEvent> {
   #apiKey: string;
   #calendarId: string;
-  #alwaysFetchFresh: boolean;
   #transform: (event: GoogleCalendarEvent) => T;
   #fetch: FetchFunction;
 
   #requestedRanges = new RangeSet();
-
-  #pendingRequests = new Set<Promise<GoogleCalendarEvents>>();
 
   #allEvents = new Map<string, T>();
 
@@ -28,15 +25,12 @@ export class GoogleCalendarEventFetcher<T = GoogleCalendarEvent> {
   #subscribers: Set<(events: T[]) => void> = new Set();
 
   constructor(options: GoogleCalendarEvent extends T ? MakeOptional<Options<T>, "transform"> : Options<T>) {
-    const { apiKey, calendarId, fetch, transform, alwaysFetchFresh } = options;
+    const { apiKey, calendarId, fetch, transform } = options;
     if (typeof apiKey !== "string" || apiKey == "") {
       throw new Error("apiKey is a required string");
     }
     if (typeof calendarId !== "string" || calendarId == "") {
       throw new Error("calendarId is a required string");
-    }
-    if (alwaysFetchFresh != undefined && typeof alwaysFetchFresh !== "boolean") {
-      throw new Error("alwaysFetchFresh must be a boolean");
     }
     if (fetch != undefined && typeof fetch !== "function") {
       throw new Error("fetch must be a function");
@@ -46,32 +40,33 @@ export class GoogleCalendarEventFetcher<T = GoogleCalendarEvent> {
     }
     this.#apiKey = apiKey;
     this.#calendarId = calendarId;
-    this.#alwaysFetchFresh = alwaysFetchFresh ?? false;
     this.#fetch = fetch ?? globalThis.fetch;
     this.#transform = transform ?? ((event) => event as T);
   }
 
   /**
-   * Fetches all the events within a given range.
+   * Fetches all the events within a given range that have not yet been fetched.
    * @param from The start of the time range to fetch events for.
    * @param to The end of the time range to fetch events for.
-   * @returns A promise that resolves to {@link allEvents}.
+   * @returns A promise that resolves when any new events in the range have been fetched
    * @see https://developers.google.com/workspace/calendar/api/v3/reference/events/list
    */
-  async fetchEvents(from: Date, to: Date): Promise<T[]> {
-    if (from >= to) {
-      throw new Error("Invalid date range: 'from' must be before 'to'.");
-    }
-    const range: Range = [from.valueOf(), to.valueOf()];
-    if (this.#alwaysFetchFresh) {
-      await this.#requestEvents(range);
-    } else {
-      const existingRequests = Promise.all(this.#pendingRequests);
-      const missingRanges = this.#requestedRanges.inverse().intersection(new RangeSet([range]));
-      await Promise.all(missingRanges.ranges.map((range) => this.#requestEvents(range)));
-      await existingRequests;
-    }
-    return this.allEvents;
+  async fetchEvents(from: Date, to: Date): Promise<void> {
+    const range = this.#validateRange(from, to);
+    const missingRanges = this.#requestedRanges.inverse().intersection(new RangeSet([range]));
+    await Promise.all(missingRanges.ranges.map((range) => this.#requestEvents(range)));
+  }
+
+  /**
+   * Fetches all the events within a given range regardless of if they have been fetched before or not.
+   * @param from The start of the time range to fetch events for.
+   * @param to The end of the time range to fetch events for.
+   * @returns A promise that resolves when the range has been refetch
+   * @see https://developers.google.com/workspace/calendar/api/v3/reference/events/list
+   */
+  async refetchEvents(from: Date, to: Date): Promise<void> {
+    const range = this.#validateRange(from, to);
+    await this.#requestEvents(range);
   }
 
   /**
@@ -89,14 +84,22 @@ export class GoogleCalendarEventFetcher<T = GoogleCalendarEvent> {
   }
 
   /**
+   * Creates a range from 2 dates and throws an error if the range is invalid.
+   */
+  #validateRange(from: Date, to: Date): Range {
+    if (from >= to) {
+      throw new Error("Invalid date range: 'from' must be before 'to'.");
+    }
+    return [from.valueOf(), to.valueOf()];
+  }
+
+  /**
    * Requests events for a specific range from the Google Calendar API.
    */
   async #requestEvents(range: Range) {
-    const pendingRequest = this.#callGoogleApi(new Date(range[0]), new Date(range[1]));
     try {
       this.#requestedRanges.addRange(range);
-      this.#pendingRequests.add(pendingRequest);
-      const events = await pendingRequest;
+      const events = await this.#callGoogleApi(new Date(range[0]), new Date(range[1]));
       for (const event of events.items) {
         this.#allEvents.set(event.id, this.#transform(event));
       }
@@ -104,8 +107,6 @@ export class GoogleCalendarEventFetcher<T = GoogleCalendarEvent> {
     } catch (error) {
       this.#requestedRanges.removeRange(range);
       throw error;
-    } finally {
-      this.#pendingRequests.delete(pendingRequest);
     }
   }
 
@@ -141,8 +142,6 @@ export type Options<T = unknown> = {
   apiKey: string;
   /** The ID of the Google Calendar to fetch events from. */
   calendarId: string;
-  /** True if a events should always be re-requested from Google instead of cached. */
-  alwaysFetchFresh?: boolean;
   /** Optional fetch function to use for making HTTP requests. */
   fetch?: FetchFunction;
   /** Optional function to transform the fetched events. */
