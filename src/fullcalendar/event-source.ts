@@ -33,7 +33,7 @@ export const eventSourceDef: EventSourceDef<GoogleCalendarEventSourceMeta> = {
   fetch: ({ eventSource, range }, success, error) => {
     eventSource.meta.eventFetcher
       .fetchEvents(range.start, range.end)
-      .then((events) => success({ rawEvents: events }))
+      .then(() => success({ rawEvents: eventSource.meta.eventFetcher.allEvents }))
       .catch(error);
   },
 };
