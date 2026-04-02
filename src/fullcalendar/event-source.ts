@@ -12,11 +12,11 @@ export type GoogleCalendarEventSourceMeta = {
 
 export const eventSourceDef: EventSourceDef<GoogleCalendarEventSourceMeta> = {
   parseMeta: ({ googleCalendarId, googleCalendarApiKey, customFetch }) => {
-    if (googleCalendarId == undefined) {
+    if (googleCalendarId == null) {
       return null;
     }
 
-    if (googleCalendarApiKey == undefined) {
+    if (googleCalendarApiKey == null) {
       throw new Error("googleCalendarApiKey is required");
     }
 

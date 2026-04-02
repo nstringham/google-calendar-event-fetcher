@@ -29,25 +29,26 @@ export class GoogleCalendarEventFetcher<T = GoogleCalendarEvent> {
 
   constructor(options: GoogleCalendarEvent extends T ? MakeOptional<Options<T>, "transform"> : Options<T>) {
     const { apiKey, calendarId, fetch, transform, alwaysFetchFresh } = options;
-    if (typeof apiKey !== "string" || apiKey == "") {
+    if (typeof apiKey !== "string" || apiKey === "") {
       throw new Error("apiKey is a required string");
     }
-    if (typeof calendarId !== "string" || calendarId == "") {
+    if (typeof calendarId !== "string" || calendarId === "") {
       throw new Error("calendarId is a required string");
     }
-    if (alwaysFetchFresh != undefined && typeof alwaysFetchFresh !== "boolean") {
+    if (alwaysFetchFresh != null && typeof alwaysFetchFresh !== "boolean") {
       throw new Error("alwaysFetchFresh must be a boolean");
     }
-    if (fetch != undefined && typeof fetch !== "function") {
+    if (fetch != null && typeof fetch !== "function") {
       throw new Error("fetch must be a function");
     }
-    if (transform != undefined && typeof transform !== "function") {
+    if (transform != null && typeof transform !== "function") {
       throw new Error("transform must be a function");
     }
     this.#apiKey = apiKey;
     this.#calendarId = calendarId;
     this.#alwaysFetchFresh = alwaysFetchFresh ?? false;
     this.#fetch = fetch ?? globalThis.fetch;
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion -- this value is only used when transform is not provided so T is GoogleCalendarEvent
     this.#transform = transform ?? ((event) => event as T);
   }
 
@@ -68,7 +69,7 @@ export class GoogleCalendarEventFetcher<T = GoogleCalendarEvent> {
     } else {
       const existingRequests = Promise.all(this.#pendingRequests);
       const missingRanges = this.#requestedRanges.inverse().intersection(new RangeSet([range]));
-      await Promise.all(missingRanges.ranges.map((range) => this.#requestEvents(range)));
+      await Promise.all(missingRanges.ranges.map((missingRange) => this.#requestEvents(missingRange)));
       await existingRequests;
     }
     return this.allEvents;

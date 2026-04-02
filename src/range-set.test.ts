@@ -96,9 +96,13 @@ describe("RangeSet", () => {
 
       const iterator = set[Symbol.iterator]();
 
+      // oxlint-disable-next-line typescript/unbound-method -- we are not calling the function
       expect(iterator.map).toBeTypeOf("function");
+      // oxlint-disable-next-line typescript/unbound-method -- we are not calling the function
       expect(iterator.filter).toBeTypeOf("function");
+      // oxlint-disable-next-line typescript/unbound-method -- we are not calling the function
       expect(iterator.reduce).toBeTypeOf("function");
+      // oxlint-disable-next-line typescript/unbound-method -- we are not calling the function
       expect(iterator.toArray).toBeTypeOf("function");
     });
   });
