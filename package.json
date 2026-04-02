@@ -43,7 +43,7 @@
     "test": "vitest",
     "test:browser": "vitest run --browser",
     "test:coverage": "vitest run --coverage",
-    "lint": "oxlint",
+    "lint": "oxlint --deny-warnings",
     "format": "prettier --write .",
     "prettier": "prettier --check .",
     "version": "version-changelog CHANGELOG.md && git add CHANGELOG.md",
