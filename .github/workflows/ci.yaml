@@ -22,7 +22,7 @@ jobs:
       - run: npm ci
       - run: npm run prettier
 
-  eslint:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
