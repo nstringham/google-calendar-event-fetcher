@@ -35,7 +35,7 @@ export class RangeSet {
 
     const lowerBound = this.#getLowerBoundIndex(start);
 
-    if (lowerBound == null || lowerBound % 2 != 0) {
+    if (lowerBound == null || lowerBound % 2 !== 0) {
       return false;
     }
 
@@ -66,11 +66,11 @@ export class RangeSet {
 
     const newValues: number[] = [];
 
-    if (firstDeleteIndex % 2 == 0) {
+    if (firstDeleteIndex % 2 === 0) {
       newValues.push(start);
     }
 
-    if (lastDeleteIndex % 2 != 0) {
+    if (lastDeleteIndex % 2 !== 0) {
       newValues.push(end);
     }
 
@@ -99,11 +99,11 @@ export class RangeSet {
 
     const newValues: number[] = [];
 
-    if (firstDeleteIndex % 2 != 0) {
+    if (firstDeleteIndex % 2 !== 0) {
       newValues.push(start);
     }
 
-    if (lastDeleteIndex % 2 == 0) {
+    if (lastDeleteIndex % 2 === 0) {
       newValues.push(end);
     }
 
@@ -117,10 +117,10 @@ export class RangeSet {
   inverse(): RangeSet {
     const inverse = new RangeSet();
     inverse.#ranges = [Number.NEGATIVE_INFINITY, ...this.#ranges, Number.POSITIVE_INFINITY];
-    if (inverse.#ranges[0] == inverse.#ranges[1]) {
+    if (inverse.#ranges[0] === inverse.#ranges[1]) {
       inverse.#ranges.splice(0, 2);
     }
-    if (inverse.#ranges.at(-1) == inverse.#ranges.at(-2)) {
+    if (inverse.#ranges.at(-1) === inverse.#ranges.at(-2)) {
       inverse.#ranges.splice(inverse.#ranges.length - 2);
     }
     return inverse;
@@ -142,13 +142,13 @@ export class RangeSet {
     while (indexA < rangesA.length && indexB < rangesB.length) {
       const a = rangesA[indexA];
       const b = rangesB[indexB];
-      if (a < b || (a == b && indexA % 2 != 0)) {
-        if (indexB % 2 != 0) {
+      if (a < b || (a === b && indexA % 2 !== 0)) {
+        if (indexB % 2 !== 0) {
           intersection.#ranges.push(a);
         }
         indexA++;
       } else {
-        if (indexA % 2 != 0) {
+        if (indexA % 2 !== 0) {
           intersection.#ranges.push(b);
         }
         indexB++;
@@ -165,10 +165,10 @@ export class RangeSet {
    * or null if the target value smaller than the smallest value
    */
   #getLowerBoundIndex(target: number): number | null {
-    if (this.#ranges.length == 0 || this.#ranges[0] > target) {
+    if (this.#ranges.length === 0 || this.#ranges[0] > target) {
       return null;
     }
-    if (this.#ranges[this.#ranges.length - 1] <= target) {
+    if (this.#ranges.at(-1)! <= target) {
       return this.#ranges.length - 1;
     }
 
@@ -196,7 +196,7 @@ export class RangeSet {
    * or null if the target value larger than the largest value
    */
   #getUpperBoundIndex(target: number): number | null {
-    if (this.#ranges.length == 0 || this.#ranges[this.#ranges.length - 1] < target) {
+    if (this.#ranges.length === 0 || this.#ranges.at(-1)! < target) {
       return null;
     }
     if (this.#ranges[0] >= target) {

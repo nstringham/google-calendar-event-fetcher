@@ -21,11 +21,12 @@ describe("GoogleCalendarEventFetcher", () => {
     });
 
     it("accepts a alwaysFetchFresh flag", () => {
-      new GoogleCalendarEventFetcher({
+      const fetcher = new GoogleCalendarEventFetcher({
         apiKey: API_KEY,
         calendarId: CALENDAR_ID,
         alwaysFetchFresh: true,
       });
+      expect(fetcher).toBeInstanceOf(GoogleCalendarEventFetcher);
     });
 
     it("requires alwaysFetchFresh to be a boolean if provided", () => {
@@ -43,11 +44,12 @@ describe("GoogleCalendarEventFetcher", () => {
     it("accepts a fetch function", () => {
       const fetch = mockFetch();
 
-      new GoogleCalendarEventFetcher({
+      const fetcher = new GoogleCalendarEventFetcher({
         apiKey: API_KEY,
         calendarId: CALENDAR_ID,
         fetch: fetch,
       });
+      expect(fetcher).toBeInstanceOf(GoogleCalendarEventFetcher);
 
       expect(fetch).not.toHaveBeenCalled();
     });
@@ -65,11 +67,12 @@ describe("GoogleCalendarEventFetcher", () => {
     });
 
     it("accepts a transform function", () => {
-      new GoogleCalendarEventFetcher({
+      const fetcher = new GoogleCalendarEventFetcher({
         apiKey: API_KEY,
         calendarId: CALENDAR_ID,
         transform: transformToString,
       });
+      expect(fetcher).toBeInstanceOf(GoogleCalendarEventFetcher);
     });
 
     it("requires transform to be a function if provided", () => {
@@ -235,7 +238,7 @@ describe("GoogleCalendarEventFetcher", () => {
       await fetcher.fetchEvents(new Date("2026-01-01T00:00:00Z"), new Date("2026-01-21T00:00:00Z"));
       await fetcher.fetchEvents(new Date("2026-01-08T00:00:00Z"), new Date("2026-01-18T00:00:00Z"));
 
-      expect(fetch).toBeCalledTimes(2);
+      expect(fetch).toHaveBeenCalledTimes(2);
       expect(fetcher.allEvents).toEqual([EVENTS.SIMPLE_1, EVENTS.SIMPLE_2]);
     });
 
