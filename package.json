@@ -3,23 +3,23 @@
   "version": "0.2.0",
   "description": "Fetch and transform events from the Google Calendar API",
   "keywords": [
-    "google",
     "calendar",
-    "google-calendar",
-    "fullcalendar"
+    "fullcalendar",
+    "google",
+    "google-calendar"
   ],
   "homepage": "https://github.com/nstringham/google-calendar-event-fetcher#readme",
   "bugs": {
     "url": "https://github.com/nstringham/google-calendar-event-fetcher/issues"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nstringham/google-calendar-event-fetcher.git"
-  },
   "license": "MIT",
   "author": {
     "name": "Nate Stringham",
     "url": "https://github.com/nstringham"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nstringham/google-calendar-event-fetcher.git"
   },
   "type": "module",
   "main": "lib/index.js",
@@ -50,14 +50,6 @@
     "version": "version-changelog CHANGELOG.md && git add CHANGELOG.md",
     "prepack": "npm run build"
   },
-  "peerDependencies": {
-    "@fullcalendar/core": "^6.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@fullcalendar/core": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@fullcalendar/core": "^6.1.20",
     "@vitest/browser-playwright": "^4.0.17",
@@ -68,5 +60,13 @@
     "typescript": "^5.9.3",
     "version-changelog": "^3.1.1",
     "vitest": "^4.0.17"
+  },
+  "peerDependencies": {
+    "@fullcalendar/core": "^6.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@fullcalendar/core": {
+      "optional": true
+    }
   }
 }
