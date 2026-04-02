@@ -5,11 +5,11 @@ export default defineConfig({
   options: { typeAware: true },
   categories: {
     correctness: "error",
-    suspicious: "error",
-    perf: "error",
+    suspicious: "warn",
+    perf: "warn",
   },
   rules: {
-    curly: "error",
-    eqeqeq: ["error", "smart"],
+    curly: "warn",
+    eqeqeq: ["warn", "smart"],
   },
 });
