@@ -28,7 +28,7 @@ jobs:
           validation_level: warn
           version: ${{ steps.tag_name.outputs.tag }}
           path: ./CHANGELOG.md
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           body: ${{ steps.changelog_reader.outputs.changes }}
           files: google-calendar-event-fetcher-*.tgz
