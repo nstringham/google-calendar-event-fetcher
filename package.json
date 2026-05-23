@@ -48,7 +48,7 @@
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "version": "version-changelog CHANGELOG.md && git add CHANGELOG.md",
-    "prepack": "npm run build"
+    "prepack": "pnpm run build"
   },
   "devDependencies": {
     "@fullcalendar/core": "^6.1.20",
@@ -67,6 +67,16 @@
   "peerDependenciesMeta": {
     "@fullcalendar/core": {
       "optional": true
+    }
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": ">=11"
+    },
+    "runtime": {
+      "name": "node",
+      "version": ">=26"
     }
   }
 }
