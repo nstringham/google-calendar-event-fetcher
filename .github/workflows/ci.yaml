@@ -15,34 +15,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 26
-          cache: npm
-      - run: npm ci
-      - run: npm run format:check
+          cache: pnpm
+      - run: pnpm ci
+      - run: pnpm run format:check
 
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 26
-          cache: npm
-      - run: npm ci
-      - run: npm run lint
+          cache: pnpm
+      - run: pnpm ci
+      - run: pnpm run lint
 
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 26
-          cache: npm
-      - run: npm ci
-      - run: npm pack
+          cache: pnpm
+      - run: pnpm ci
+      - run: pnpm pack
 
   test:
     runs-on: ubuntu-latest
@@ -51,33 +54,36 @@ jobs:
         node-version: [22, 24, 25, 26]
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
-      - run: npm ci
-      - run: npm test
+          cache: pnpm
+      - run: pnpm ci
+      - run: pnpm test
 
   test-browser:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 26
-          cache: npm
-      - run: npm ci
-      - run: npx playwright install --with-deps
-      - run: npm run test:browser
+          cache: pnpm
+      - run: pnpm ci
+      - run: pnpx playwright install --with-deps
+      - run: pnpm run test:browser
 
   test-coverage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 26
-          cache: npm
-      - run: npm ci
-      - run: npm run test:coverage
+          cache: pnpm
+      - run: pnpm ci
+      - run: pnpm run test:coverage
