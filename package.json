@@ -51,16 +51,16 @@
     "prepack": "pnpm run build"
   },
   "devDependencies": {
-    "@fullcalendar/core": "^6.1.20",
-    "@vitest/browser-playwright": "^4.0.17",
-    "@vitest/coverage-v8": "^4.0.17",
+    "@fullcalendar/core": "^6.1.21",
+    "@vitest/browser-playwright": "^4.1.9",
+    "@vitest/coverage-v8": "^4.1.9",
     "oxfmt": "^0.49.0",
-    "oxlint": "^1.58.0",
+    "oxlint": "^1.72.0",
     "oxlint-tsgolint": "^0.22.1",
     "playwright": "^1.61.1",
-    "typescript": "^6.0.2",
+    "typescript": "^6.0.3",
     "version-changelog": "^3.1.1",
-    "vitest": "^4.0.17"
+    "vitest": "^4.1.9"
   },
   "peerDependencies": {
     "@fullcalendar/core": "^6.0.0"
