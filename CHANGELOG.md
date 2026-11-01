@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased][]
 
+### Added
+
+- `refetchEvents` to force a request to go to the Google API skipping the cache
+
+### Changed
+
+- `fetchEvents` is no-longer guaranteed to wait for all events in the rage to be fetched if a previous call to `fetchEvents` has not resolved
+- `fetchEvents` no-longer returns events (use `GoogleCalendarEventFetcher.allEvents` instead)
+
+### Removed
+
+- `alwaysFetchFresh` option (use `refetchEvents` instead)
+
 ## [0.2.0][] - 2026-01-27
 
 ### Added
