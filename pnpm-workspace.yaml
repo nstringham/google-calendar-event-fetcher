@@ -1,0 +1,2 @@
+message: "chore: 🔖 release version %s" # Commit message template for version releases
+tagVersionPrefix: v # Prefix for version tags
