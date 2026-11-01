@@ -8,6 +8,8 @@ import type { EventSourceDef } from "@fullcalendar/core/internal";
  */
 export type GoogleCalendarEventSourceMeta = {
   eventFetcher: GoogleCalendarEventFetcher<EventInput>;
+  successCallback?: (response: { rawEvents: EventInput[] }) => void;
+  errorCallback?: (error: Error) => void;
 };
 
 export const eventSourceDef: EventSourceDef<GoogleCalendarEventSourceMeta> = {
@@ -30,11 +32,13 @@ export const eventSourceDef: EventSourceDef<GoogleCalendarEventSourceMeta> = {
     };
   },
 
-  fetch: ({ eventSource, range }, success, error) => {
+  fetch: ({ eventSource, range }, successCallback, errorCallback) => {
+    eventSource.meta.successCallback = successCallback;
+    eventSource.meta.errorCallback = errorCallback;
     eventSource.meta.eventFetcher
       .fetchEvents(range.start, range.end)
-      .then(() => success({ rawEvents: eventSource.meta.eventFetcher.allEvents }))
-      .catch(error);
+      .then(() => eventSource.meta.successCallback!({ rawEvents: eventSource.meta.eventFetcher.allEvents }))
+      .catch((error: Error) => eventSource.meta.errorCallback!(error));
   },
 };
 
